@@ -303,6 +303,22 @@ public class Player
 			}
 		}
 		
+		if (command.equals("DISCONNECT"))
+		{
+			if (!connectedToOpponent)
+			{
+				out.println("DISCONNECTFAILED");
+				return;
+			}
+			
+			connectedToOpponent = false;
+			currentDir = baseDir;
+			System.out.println("Attempting to Disconnect");
+			out.println("DISCONNECTSUCCESS");
+			
+			return;
+		}
+		
 		if (command.contains("CONNECT"))
 		{
 			if (connectedToOpponent)
@@ -334,22 +350,6 @@ public class Player
 					out.println("CONNECTFAILEDWRONGIP");
 					return;
 				}
-			}
-		}
-		
-		if (command.contains("DISCONNECT"))
-		{
-			if (!connectedToOpponent)
-			{
-				out.println("DISCONNECTFAILED");
-				return;
-			}
-			else
-			{
-				out.println("DISCONNECTSUCCESS");
-				connectedToOpponent = false;
-				currentDir = baseDir;
-				return;
 			}
 		}
 	}
@@ -451,7 +451,7 @@ public class Player
 		}
 		else
 		{
-			String dir = opponentIP + "\\" + getParentDirAsString(opponentCurrentDir);
+			String dir = opponentIP + "\\" + getParentDirAsString(currentDir);
 			out.println(dir);
 		}
 	}

@@ -268,7 +268,7 @@ public class Game
 		{
 			String line = in.nextLine();
 			//if (line.startsWith("C:"))
-			if (!line.isEmpty() && !line.equals("CDFAILED"))
+			if (!line.isEmpty() && !line.equals("CDFAILED")) 
 			{
 				System.out.print(line);
 				break;
@@ -331,6 +331,8 @@ public class Game
 	public void disconnect(String command)
 	{
 		out.println("DISCONNECT");
+		
+		delay(50);
 		
 		while (in.hasNextLine())
 		{

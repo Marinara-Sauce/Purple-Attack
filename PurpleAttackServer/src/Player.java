@@ -1,7 +1,9 @@
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import game.Directory;
@@ -294,6 +296,30 @@ public class Player
 	//Sets up a file system for the game
 	public void setupFileSystem()
 	{
+		//Sets the password variables to something random
+		
+		List<String> potentialPasswordText = new ArrayList<>();
+		
+		//Populates the password strings array
+		java.io.File inFile = new java.io.File("resources/passwords.txt");
+		try {
+			Scanner fileReader = new Scanner(inFile);
+			
+			while (fileReader.hasNextLine())
+				potentialPasswordText.add(fileReader.nextLine());
+			
+			fileReader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		//Sets the master password
+		password = potentialPasswordText.get(randomNumber(0, potentialPasswordText.size() - 1)) + randomNumber(0, 9999);
+		System.out.println(name + "'s password is: " + password);
+		
+		//Sets the secure folder password
+		secureFolderPassword = potentialPasswordText.get(randomNumber(0, potentialPasswordText.size() - 1)) + randomNumber(0, 9999);
+		
 		homeDir.clear();
 		homeFiles.clear();
 		
@@ -327,7 +353,11 @@ public class Player
 								+ "Good luck out there.\n"
 								+ "Eric");
 	
+		TextFile securePasswordFile = new TextFile("securefolderpassword.txt");
+		securePasswordFile.setContents("DELETE THIS FILE IMMEDIATLY AFTER VIEWING\nThe password for the secure folder is:\n" + secureFolderPassword);
+		
 		currentDir.addFile(assignmentFile);
+		currentDir.addFile(securePasswordFile);
 	}
 	
 	public void getCurrentDirectory()
@@ -363,6 +393,18 @@ public class Player
 	}
 	
 	//---------------------------Util Checking Methods and Stuff-------------------------\\
+	
+	public int randomNumber(int min, int max)
+	{
+		if (min >= max) 
+		{
+			System.err.println("Random Numer Min is Either Greater than or equal to the max!");
+			return 0;
+		}
+		
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
+	}
 	
 	//Sends a message to the client
 	public void sendMessageToClient(String message)

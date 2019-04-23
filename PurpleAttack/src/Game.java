@@ -283,9 +283,43 @@ public class Game
 		
 		if (command.length() == "connect".length())
 		{
-			System.out.println("Please enter the IP to connect to (Example: 192.168.1.1)");
+			System.out.println("Please enter the IP or website to connect to (Example: 192.168.1.1)");
 			ip = input.nextLine();
 		}
+		else
+			ip = command.replace("connect ", "");
+		
+		out.println("CONNECT" + ip);
+		System.out.println("Connecting to " + ip + "...");
+		delay(1000);
+		
+		while (in.hasNextLine())
+		{
+			String line = in.nextLine();
+			
+			if (line.equals("CONNECTSUCCESS"))
+			{
+				System.out.println("Success!");
+				break;
+			}
+			else if (line.equals("CONNECTFAILEDALLREADYCONNECTED"))
+			{
+				System.out.println("Failed to connect! Terminate the current connection to connect");
+				break;
+			}
+			else if (line.equals("CONNECTFAILEDCONNECTTOSELF"))
+			{
+				System.out.println("Failed to connect! You cannot connect to yourself!");
+				break;
+			}
+			else if (line.equals("CONNECTFAILEDWRONGIP"))
+			{
+				System.out.println("Failed to connect! Could not locate IP");
+				break;
+			}
+		}
+		
+		System.out.println("Connection Success!");
 	}
 	
 	public void printDirs(String command)

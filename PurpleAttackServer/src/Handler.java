@@ -34,7 +34,7 @@ public class Handler implements Runnable
 					if (input.contains("NEWPLAYER"))
 					{
 						String playerName = input.replace("NEWPLAYER", "");
-						game.addPlayer(new Player(playerName, socket, out, in));
+						game.addPlayer(new Player(playerName, socket, out, in, game));
 					}
 					else if (input.equals("REQUESTCURRENTDIR"))
 					{

@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import game.Directory;
+
 public class Game 
 {
 	private List<Player> players = new ArrayList<>();
@@ -107,6 +109,19 @@ public class Game
 			if (ready)
 				break;
 		}
+	}
+	
+	//Inputs the player calling this function, returns the opposing player
+	public Directory getOpponentBaseDirectory(Player player)
+	{
+		Player otherPlayer = null;
+		
+		if (players.get(0) == player)
+			otherPlayer = players.get(1);
+		else
+			otherPlayer = players.get(0);
+		
+		return otherPlayer.getBaseDir();
 	}
 	
 	public void delay(int millis)

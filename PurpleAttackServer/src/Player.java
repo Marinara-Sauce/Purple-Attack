@@ -13,6 +13,8 @@ import game.TextFile;
 
 public class Player 
 {
+	private Game game;
+	
 	private String name;
 	private Socket socket;
 	private PrintWriter out;
@@ -22,6 +24,8 @@ public class Player
 	
 	private List<Directory> homeDir = new ArrayList<>();
 	private List<File> homeFiles = new ArrayList<>();
+	
+	private Directory baseDir;
 	
 	private Directory currentDir;
 	
@@ -36,12 +40,16 @@ public class Player
 	private String secureFolderPassword = "ligma";
 	private String password = "memes";
 	
-	public Player(String name, Socket socket, PrintWriter out, Scanner in)
+	private boolean connectedToOpponent; //True if the player is connected to another player
+	private Directory opponentCurrentDir; //Current Directory but if connected to someone else
+	
+	public Player(String name, Socket socket, PrintWriter out, Scanner in, Game game)
 	{
 		this.name = name;
 		this.socket = socket;
 		this.out = out;
 		this.in = in;
+		this.game = game;
 		
 		System.out.println("Created a new player with name: " + name + " | Socket: " + socket);
 	}
@@ -294,6 +302,39 @@ public class Player
 				out.println("SUCCESS");
 			}
 		}
+		
+		if (command.contains("CONNECT"))
+		{
+			if (connectedToOpponent)
+			{
+				out.println("CONNECTFAILEDALLREADYCONNECTED");
+				return;
+			}
+			
+			String ip = command.replace("CONNECT", "");
+			
+			//Checks if the ip is a website name or ip
+			if (ip.contains("."))
+			{
+				if (ip.equals(playerIP))
+				{
+					out.println("CONNECTFAILEDCONNECTTOSELF");
+					return;
+				}
+				else if (ip.equals(opponentIP))
+				{
+					out.println("CONNECTSUCCESS");
+					connectedToOpponent = true;
+					opponentCurrentDir = game.getOpponentBaseDirectory(this);
+					return;
+				}
+				else
+				{
+					out.println("CONNECTFAILEDWRONGIP");
+					return;
+				}
+			}
+		}
 	}
 	
 	//Sets up a file system for the game
@@ -380,12 +421,22 @@ public class Player
 		
 		currentDir.addFile(assignmentFile);
 		currentDir.addFile(securePasswordFile);
+		
+		baseDir = currentDir;
 	}
 	
 	public void getCurrentDirectory()
 	{
-		String dir = "C:\\" + getParentDirAsString(currentDir);
-		out.println(dir);
+		if (!connectedToOpponent)
+		{
+			String dir = "C:\\" + getParentDirAsString(currentDir);
+			out.println(dir);
+		}
+		else
+		{
+			String dir = opponentIP + "\\" + getParentDirAsString(opponentCurrentDir);
+			out.println(dir);
+		}
 	}
 	
 	public String getParentDirAsString(Directory dir)
@@ -479,5 +530,13 @@ public class Player
 	public void setPlayerIP(String ip)
 	{
 		playerIP = ip;
+	}
+
+	public Directory getBaseDir() {
+		return baseDir;
+	}
+
+	public void setBaseDir(Directory baseDir) {
+		this.baseDir = baseDir;
 	}
 }

@@ -30,6 +30,9 @@ public class Player
 	private File copiedFile;
 	private boolean moveFile;
 	
+	private String playerIP;
+	private String opponentIP;
+	
 	private String secureFolderPassword = "ligma";
 	private String password = "memes";
 	
@@ -339,6 +342,25 @@ public class Player
 		currentDir.getDirectorys().get(currentDir.getIndexOfDirectory("secure")).addFile(noticeFile);
 		currentDir.getDirectorys().get(currentDir.getIndexOfDirectory("secure")).addFile(passwordFile);
 		
+		//Set up contacts folder
+		Directory contactsFolder = currentDir.getDirectorys().get(currentDir.getIndexOfDirectory("contacts"));
+		
+		TextFile serverIP = new TextFile("servers.txt");
+		TextFile websiteIP = new TextFile("websites.txt");
+		
+		websiteIP.setContents("Websites to visit\n\n"
+				+ "Secure Serve - Shop for security software such as firewalls and anti-maleware software - URL: secureserve.com\n"
+				+ "Breakware - Shop for malicious software and code - URL: breakware.onion\n"
+				+ "Goodegg - Shop for computer parts - URL: goodegg.com\n"
+				+ "Saltiens - Shop for password cracking software - URL: saltienscrackers.onion");
+		
+		serverIP.setContents("Important IP Addresses to Servers\n\n"
+				+ "Your IP: " + playerIP + "\n"
+				+ "Target's IP: " + opponentIP + "\n");
+		
+		contactsFolder.addFile(websiteIP);
+		contactsFolder.addFile(serverIP);
+		
 		TextFile assignmentFile = new TextFile("assignment.txt", currentDir);
 		
 		assignmentFile.setContents("Hello, " + name + ". I'll skip past the warm greetings and get straight to the point.\n"
@@ -437,5 +459,25 @@ public class Player
 	public String getOpponentsName()
 	{
 		return opponentName;
+	}
+	
+	public String getOpponentIP()
+	{
+		return opponentIP;
+	}
+	
+	public void setOpponentIP(String ip)
+	{
+		opponentIP = ip;
+	}
+	
+	public String getPlayerIP()
+	{
+		return playerIP;
+	}
+	
+	public void setPlayerIP(String ip)
+	{
+		playerIP = ip;
 	}
 }

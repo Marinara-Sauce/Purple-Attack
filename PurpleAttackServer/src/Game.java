@@ -1,6 +1,7 @@
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game 
 {
@@ -75,6 +76,16 @@ public class Game
 		players.get(0).setOpponentName(players.get(1).getName());
 		players.get(1).setOpponentName(players.get(0).getName());
 		
+		//Set all players IP addresses
+		String player1IP = generateIP();
+		String player2IP = generateIP();
+		
+		players.get(0).setPlayerIP(player1IP);
+		players.get(1).setPlayerIP(player2IP);
+		
+		players.get(0).setOpponentIP(player2IP);
+		players.get(1).setOpponentIP(player1IP);
+		
 		for (int i = 0 ; i < players.size() ; i++)
 			players.get(i).setupFileSystem();
 
@@ -117,5 +128,22 @@ public class Game
 				return players.get(i);
 		
 		return null;
+	}
+	
+	public String generateIP()
+	{
+		return randomNumber(0, 255) + "." + randomNumber(0, 255) + "." + randomNumber(0, 255) + "." + randomNumber(0, 255);
+	}
+	
+	public int randomNumber(int min, int max)
+	{
+		if (min >= max) 
+		{
+			System.err.println("Random Numer Min is Either Greater than or equal to the max!");
+			return 0;
+		}
+		
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
 	}
 }

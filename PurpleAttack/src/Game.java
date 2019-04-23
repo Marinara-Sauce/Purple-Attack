@@ -169,8 +169,11 @@ public class Game
 				else if (command.contains("ps"))
 					paste(command);
 				
-				else if (command.contains("connect"))
+				else if (command.contains("connect") && !command.equalsIgnoreCase("disconnect"))
 					connect(command);
+				
+				else if (command.equalsIgnoreCase("disconnect"))
+					disconnect(command);
 				
 				else if (command.contains("echo"))
 					System.out.println(command.replace("echo ", ""));
@@ -264,7 +267,8 @@ public class Game
 		while (in.hasNextLine())
 		{
 			String line = in.nextLine();
-			if (line.startsWith("C:"))
+			//if (line.startsWith("C:"))
+			if (!line.isEmpty() && !line.equals("CDFAILED"))
 			{
 				System.out.print(line);
 				break;
@@ -317,9 +321,31 @@ public class Game
 				System.out.println("Failed to connect! Could not locate IP");
 				break;
 			}
+			else
+			{
+				break;
+			}
 		}
+	}
+	
+	public void disconnect(String command)
+	{
+		out.println("DISCONNECT");
 		
-		System.out.println("Connection Success!");
+		while (in.hasNextLine())
+		{
+			String line = in.nextLine();
+			
+			if (line.equals("DISCONNECTSUCCESS"))
+			{
+				break;
+			}
+			else if (line.equals("DISCONNECTFAILED"))
+			{
+				System.out.println("Failed to disconnect, you are not connected to a server!");
+				break;
+			}
+		}
 	}
 	
 	public void printDirs(String command)

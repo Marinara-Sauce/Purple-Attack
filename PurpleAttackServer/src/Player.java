@@ -312,7 +312,7 @@ public class Player
 			}
 			
 			String ip = command.replace("CONNECT", "");
-			
+
 			//Checks if the ip is a website name or ip
 			if (ip.contains("."))
 			{
@@ -326,6 +326,7 @@ public class Player
 					out.println("CONNECTSUCCESS");
 					connectedToOpponent = true;
 					opponentCurrentDir = game.getOpponentBaseDirectory(this);
+					currentDir = opponentCurrentDir;
 					return;
 				}
 				else
@@ -333,6 +334,22 @@ public class Player
 					out.println("CONNECTFAILEDWRONGIP");
 					return;
 				}
+			}
+		}
+		
+		if (command.contains("DISCONNECT"))
+		{
+			if (!connectedToOpponent)
+			{
+				out.println("DISCONNECTFAILED");
+				return;
+			}
+			else
+			{
+				out.println("DISCONNECTSUCCESS");
+				connectedToOpponent = false;
+				currentDir = baseDir;
+				return;
 			}
 		}
 	}

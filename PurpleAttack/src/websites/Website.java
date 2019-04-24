@@ -9,7 +9,7 @@ public class Website {
 	protected static String URL = "<WEBSITE URL>";
 	protected static int health = 300;
 	
-	public void run()
+	public static void run()
 	{
 		System.out.println("Resolving DNS Host...");
 		delay(2000); //This value changes depending on the users networking card

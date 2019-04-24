@@ -22,6 +22,9 @@ public class Game
 	
 	private List<String> bootSequenceText;
 	
+	private NetworkingCard networking;
+	private Processor processor;
+	
 	public Game()
 	{
 		input = new Scanner(System.in);
@@ -109,7 +112,10 @@ public class Game
 		playBootSequence();
 		
 		//Sets up processor
-		Processor processor = new Processor();
+		processor = new Processor();
+		
+		//Sets up networking card
+		networking = new NetworkingCard();
 		
 		//Inits Bitcoin and such
 		BitcoinMiner bitcoin = new BitcoinMiner(this, processor);
@@ -295,7 +301,7 @@ public class Game
 		
 		out.println("CONNECT" + ip);
 		System.out.println("Connecting to " + ip + "...");
-		delay(1000);
+		delay(networking.getUpdate() + 500);
 		
 		while (in.hasNextLine())
 		{
@@ -687,5 +693,10 @@ public class Game
 		}
 		
 		return null;
+	}
+	
+	public NetworkingCard getNetworkingCard()
+	{
+		return networking;
 	}
 }

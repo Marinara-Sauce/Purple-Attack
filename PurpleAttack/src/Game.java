@@ -25,6 +25,8 @@ public class Game
 	private NetworkingCard networking;
 	private Processor processor;
 	
+	private BitcoinMiner bitcoin;
+	
 	public Game()
 	{
 		input = new Scanner(System.in);
@@ -118,7 +120,7 @@ public class Game
 		networking = new NetworkingCard();
 		
 		//Inits Bitcoin and such
-		BitcoinMiner bitcoin = new BitcoinMiner(this, processor);
+		bitcoin = new BitcoinMiner(this, processor);
 		bitcoin.startMining();
 		
 		processor.setBitcoinMiner(bitcoin);
@@ -299,37 +301,58 @@ public class Game
 		else
 			ip = command.replace("connect ", "");
 		
-		out.println("CONNECT" + ip);
-		System.out.println("Connecting to " + ip + "...");
-		delay(networking.getUpdate() + 500);
+		final String[] websites = {"www.goodegg.com"};
 		
-		while (in.hasNextLine())
+		//Check for and connect to any websites
+		
+		boolean website = false;
+		
+		for (int i = 0 ; i < websites.length ; i++)
 		{
-			String line = in.nextLine();
+			if (ip.equals(websites[i]))
+			{
+				website = true;
+				
+				//Connects
+				if (ip.equals("www.goodegg.com"))
+					Goodegg.run(this);
+			}
+		}
+		
+		if (!website)
+		{
+			out.println("CONNECT" + ip);
+			System.out.println("Connecting to " + ip + "...");
+			delay(networking.getUpdate() + 500);
 			
-			if (line.equals("CONNECTSUCCESS"))
+			while (in.hasNextLine())
 			{
-				System.out.println("Success!");
-				break;
-			}
-			else if (line.equals("CONNECTFAILEDALLREADYCONNECTED"))
-			{
-				System.out.println("Failed to connect! Terminate the current connection to connect");
-				break;
-			}
-			else if (line.equals("CONNECTFAILEDCONNECTTOSELF"))
-			{
-				System.out.println("Failed to connect! You cannot connect to yourself!");
-				break;
-			}
-			else if (line.equals("CONNECTFAILEDWRONGIP"))
-			{
-				System.out.println("Failed to connect! Could not locate IP");
-				break;
-			}
-			else
-			{
-				break;
+				String line = in.nextLine();
+				
+				if (line.equals("CONNECTSUCCESS"))
+				{
+					System.out.println("Success!");
+					break;
+				}
+				else if (line.equals("CONNECTFAILEDALLREADYCONNECTED"))
+				{
+					System.out.println("Failed to connect! Terminate the current connection to connect");
+					break;
+				}
+				else if (line.equals("CONNECTFAILEDCONNECTTOSELF"))
+				{
+					System.out.println("Failed to connect! You cannot connect to yourself!");
+					break;
+				}
+				else if (line.equals("CONNECTFAILEDWRONGIP"))
+				{
+					System.out.println("Failed to connect! Could not locate IP");
+					break;
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
 	}
@@ -632,6 +655,11 @@ public class Game
 	}
 	
 	//--------------------------UTIL FUNCTIONS-----------------------//
+	
+	public BitcoinMiner getBitcoinMiner()
+	{
+		return bitcoin;
+	}
 	
 	public void delay(int time)
 	{

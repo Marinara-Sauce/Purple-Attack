@@ -409,7 +409,7 @@ public class Player
 		websiteIP.setContents("Websites to visit\n\n"
 				+ "Secure Serve - Shop for security software such as firewalls and anti-maleware software - URL: secureserve.com\n"
 				+ "Breakware - Shop for malicious software and code - URL: breakware.onion\n"
-				+ "Goodegg - Shop for computer parts - URL: goodegg.com\n"
+				+ "Goodegg - Shop for computer parts - URL: www.goodegg.com\n"
 				+ "Saltiens - Shop for password cracking software - URL: saltienscrackers.onion");
 		
 		serverIP.setContents("Important IP Addresses to Servers\n\n"

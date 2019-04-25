@@ -11,13 +11,15 @@ public class Goodegg {
 	private static String url = "https://www.goodegg.com";
 	private static int health = 1000;
 	
-	private static String[][] catalog = {{"Intel i5 7600 - 6 Cores - $300", "Intel i7 7600 - 12 Cores - $650", "Intel i9 9600 - 24 Cores - $1200"}, {"Networking2048 - Level 2 - $125", "Connect96 - Level 3 - $275", "Online9650 - Level 4 - $500"}}; //Column 1 is cpus, colum 2 is networks
+	private static String[][] catalog = {{"Intel i5 7600 - 6 Cores - $300", "Intel i7 7600 - 12 Cores - $650", "Intel i9 9600 - 24 Cores - $1200", "The Budget CPU - 2 Cores - $25"}, {"Networking2048 - Level 2 - $125", "Connect96 - Level 3 - $275", "Online9650 - Level 4 - $500"}}; //Column 1 is cpus, colum 2 is networks
 	
 	private static List<String> cart = new ArrayList<>();
 	
 	private static Game game;
 	
-	public static void run(Game game) {
+	public static void run(Game _game) {
+		
+		game = _game;
 		
 		System.out.println("Resolving DNS Host...");
 		delay(2000); //This value changes depending on the users networking card
@@ -69,7 +71,7 @@ public class Goodegg {
 						showing = false;
 					else
 					{
-						String item = catalog[0][selection];
+						String item = catalog[0][selection - 1];
 						boolean duplicate = false;
 						//Check if the user already has it in cart
 						for (int i = 0 ; i < cart.size() ; i++)
@@ -102,7 +104,7 @@ public class Goodegg {
 						showingNetworking = false;
 					else
 					{
-						String item = catalog[1 + 1][selection];
+						String item = catalog[1][selection - 1];
 						boolean duplicate = false;
 						//Check if the user already has it in cart
 						for (int i = 0 ; i < cart.size() ; i++)
@@ -150,19 +152,20 @@ public class Goodegg {
 				//Puts prices from the string into an array
 				double[] prices = new double[cart.size()];
 				for (int i = 0 ; i < cart.size() ; i++)
-					prices[i] = Double.parseDouble(cart.get(i).split("$")[1]);
+				{
+					prices[i] = Double.parseDouble(cart.get(i).split("- ")[2].replace("$", ""));
+				}
 				
 				//Calculates Total
 				double total = 0;
 				for (int i = 0 ; i < prices.length ; i++)
 					total += prices[i];
-				
-				System.out.println("Total: $" + total + " ( BTC:" + (total / 5000) + ")");
+				System.out.println("Total: $" + total + " ( BTC:" + (total / 5000) + " )");
 				System.out.println("Your Wallet Has: $" + game.getBitcoinMiner().btcToUSD() + " | BTC: " + game.getBitcoinMiner().getAmount());
 				
-				if (getInput(input, "Would you like to purchase? ( 0 = No, 1 = Yes)", 0, 1) == 1)
+				if (getInput(input, "Would you like to purchase? ( 0 = No, 1 = Yes )", 0, 1) == 1)
 				{
-					if (game.getBitcoinMiner().purchase(total))
+					if (game.getBitcoinMiner().purchase(total / 5000))
 					{
 						System.out.println("Purchase Successful!");
 						//TODO: Adding to inventory Stuff
@@ -183,7 +186,7 @@ public class Goodegg {
 					break;
 				else
 				{
-					cart.remove(selection);
+					cart.remove(selection - 1);
 					if (cart.size() == 0)
 						return;
 				}

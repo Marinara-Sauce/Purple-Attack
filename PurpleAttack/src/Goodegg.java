@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -168,7 +166,19 @@ public class Goodegg {
 					if (game.getBitcoinMiner().purchase(total / 5000))
 					{
 						System.out.println("Purchase Successful!");
-						//TODO: Adding to inventory Stuff
+						
+						for (int i = 0 ; i < cart.size() ; i++)
+						{
+							//Checks if processor
+							if (cart.get(i).startsWith("Intel"))
+							{
+								game.getInventory().addToInventory(new Processor(cart.get(i).split(" - ")[0], Integer.parseInt(cart.get(i).split(" - ")[1].replace(" Cores", ""))));
+							}
+							else
+							{
+								game.getInventory().addToInventory(new NetworkingCard(Integer.parseInt(cart.get(i).split(" - ")[1].replace("Level ", "")), 1500, cart.get(i).split(" - ")[0]));
+							}
+						}
 						
 						cart.clear();
 						return;

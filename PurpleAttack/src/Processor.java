@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 public class Processor 
 {
-	private final String HELP_TEXT = "processor help - Displays this\nprocessor view-cores - View each cores current status\nprocessor edit-cores - Edits each cores current status";
+	private final String HELP_TEXT = "processor help - Displays this\nprocessor info - Views the current processor's information\nprocessor view-cores - View each cores current status\nprocessor edit-cores - Edits each cores current status";
 
+	private String name; //Processors Name
+	
 	private BitcoinMiner miner; //Gets set from within game
 	
 	private int numCores;
@@ -18,6 +20,16 @@ public class Processor
 		this.numCores = numCores;
 		cores = new ArrayList<>();
 		
+		initCores();
+	}
+	
+	//Used within inventory, used when adding item
+	public Processor(String name, int numCores)
+	{
+		this.numCores = numCores;
+		this.name = name;
+		
+		cores= new ArrayList<>();
 		initCores();
 	}
 	
@@ -127,6 +139,16 @@ public class Processor
 	}
 	
 	//-----------------------------GETTERS AND SETTERS----------------------------------//
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 	
 	public int getNumCores() {
 		return numCores;

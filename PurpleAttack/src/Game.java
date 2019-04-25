@@ -22,8 +22,7 @@ public class Game
 	
 	private List<String> bootSequenceText;
 	
-	private NetworkingCard networking;
-	private Processor processor;
+	private Inventory inventory;
 	
 	private BitcoinMiner bitcoin;
 	
@@ -113,17 +112,13 @@ public class Game
 	{
 		playBootSequence();
 		
-		//Sets up processor
-		processor = new Processor();
-		
-		//Sets up networking card
-		networking = new NetworkingCard();
+		inventory = new Inventory();
 		
 		//Inits Bitcoin and such
-		bitcoin = new BitcoinMiner(this, processor);
+		bitcoin = new BitcoinMiner(this, inventory.getEquippedProcessor());
 		bitcoin.startMining();
 		
-		processor.setBitcoinMiner(bitcoin);
+		inventory.getEquippedProcessor().setBitcoinMiner(bitcoin);
 		
 		System.out.println("Begin entering commands. Type help for options");
 		
@@ -137,7 +132,7 @@ public class Game
 				bitcoin.processCommand(command.replace("bitcoin ", ""));
 			
 			else if (command.startsWith("processor"))
-				processor.processCommand(command.replace("processor ", ""));
+				inventory.getEquippedProcessor().processCommand(command.replace("processor ", ""));
 			
 			else
 			{
@@ -185,6 +180,9 @@ public class Game
 				
 				else if (command.contains("echo"))
 					System.out.println(command.replace("echo ", ""));
+				
+				else if (command.startsWith("inventory"))
+					inventory.processCommand(command);
 				else
 					System.out.println("Unknown command! Type help for a list of commands");
 			}
@@ -323,7 +321,7 @@ public class Game
 		{
 			out.println("CONNECT" + ip);
 			System.out.println("Connecting to " + ip + "...");
-			delay(networking.getUpdate() + 500);
+			delay(getNetworkingCard().getUpdate() + 500);
 			
 			while (in.hasNextLine())
 			{
@@ -656,6 +654,21 @@ public class Game
 	
 	//--------------------------UTIL FUNCTIONS-----------------------//
 	
+	public Inventory getInventory()
+	{
+		return inventory;
+	}
+	
+	public NetworkingCard getNetworkingCard()
+	{
+		return inventory.getEquippedNetworkingCard();
+	}
+	
+	public Processor getProcessor()
+	{
+		return inventory.getEquippedProcessor();
+	}
+	
 	public BitcoinMiner getBitcoinMiner()
 	{
 		return bitcoin;
@@ -721,10 +734,5 @@ public class Game
 		}
 		
 		return null;
-	}
-	
-	public NetworkingCard getNetworkingCard()
-	{
-		return networking;
 	}
 }

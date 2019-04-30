@@ -9,7 +9,7 @@ public class Goodegg {
 	private static String url = "https://www.goodegg.com";
 	private static int health = 1000;
 	
-	private static String[][] catalog = {{"Intel i5 7600 - 6 Cores - $300", "Intel i7 7600 - 12 Cores - $650", "Intel i9 9600 - 24 Cores - $1200", "The Budget CPU - 2 Cores - $25"}, {"Networking2048 - Level 2 - $125", "Connect96 - Level 3 - $275", "Online9650 - Level 4 - $500"}}; //Column 1 is cpus, colum 2 is networks
+	private static String[][] catalog = {{"Intel i5 7600 - 6 Cores - $300", "Intel i7 7600 - 12 Cores - $650", "Intel i9 9600 - 24 Cores - $1200", "The Budget CPU - 2 Cores - $0"}, {"Networking2048 - Level 2 - $125", "Connect96 - Level 3 - $275", "Online9650 - Level 4 - $500"}}; //Column 1 is cpus, colum 2 is networks
 	
 	private static List<String> cart = new ArrayList<>();
 	
@@ -170,7 +170,7 @@ public class Goodegg {
 						for (int i = 0 ; i < cart.size() ; i++)
 						{
 							//Checks if processor
-							if (cart.get(i).startsWith("Intel"))
+							if (cart.get(i).startsWith("Intel") || cart.get(i).startsWith("The"))
 							{
 								game.getInventory().addToInventory(new Processor(cart.get(i).split(" - ")[0], Integer.parseInt(cart.get(i).split(" - ")[1].replace(" Cores", ""))));
 							}
@@ -190,15 +190,26 @@ public class Goodegg {
 				}
 				break;
 			case 2:
-				System.out.println("Which item would you like to remove? (Enter item number shown above, enter -1 to cancel)");
-				int selection = getInput(input, "Which item would you like to remove? (Enter item number shown above)", 1, cart.size() + 1);
+				int selection = getInput(input, "Which item would you like to remove? (Enter item number shown above, type -1 to cancel)", -1, cart.size());
 				if (selection == -1)
 					break;
+				else if (selection == 0)
+				{
+					System.out.println("Invalid Option!");
+					break;
+				}
 				else
 				{
-					cart.remove(selection - 1);
-					if (cart.size() == 0)
-						return;
+					try
+					{
+						cart.remove(selection - 1);
+						if (cart.size() == 0)
+							return;
+					}
+					catch (ArrayIndexOutOfBoundsException e)
+					{
+						System.out.println("Invalid Option!");
+					}
 				}
 				break;
 			case 3:

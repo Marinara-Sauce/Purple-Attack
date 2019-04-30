@@ -44,6 +44,9 @@ public class Player
 	private boolean connectedToOpponent; //True if the player is connected to another player
 	private Directory opponentCurrentDir; //Current Directory but if connected to someone else
 	
+	private boolean gameOver; //True if the game is over, notifies players when true
+	private Player winningPlayer; //True if the player won, gets set in game
+	
 	public Player(String name, Socket socket, PrintWriter out, Scanner in, Game game)
 	{
 		this.name = name;
@@ -51,6 +54,8 @@ public class Player
 		this.out = out;
 		this.in = in;
 		this.game = game;
+		
+		gameOver = false;
 		
 		System.out.println("Created a new player with name: " + name + " | Socket: " + socket);
 	}
@@ -361,8 +366,8 @@ public class Player
 			
 			if (password.equals(opponentPassword))
 			{
-				game.endGame(this);
 				out.println("PASSWORDCORRECT");
+				game.endGame(this);
 			}
 			else
 			{
@@ -463,6 +468,17 @@ public class Player
 	
 	public void getCurrentDirectory()
 	{
+		//Checks if the game is over
+		if (gameOver)
+		{
+			if (winningPlayer == this)
+				out.println("GAMEOVERWIN");
+			else
+				out.println("GAMEOVERLOSE");
+			
+			return;
+		}
+		
 		if (!connectedToOpponent)
 		{
 			String dir = "C:\\" + getParentDirAsString(currentDir);
@@ -524,6 +540,12 @@ public class Player
 	public boolean checkForMessage(String message)
 	{
 		return in.nextLine().equals(message);
+	}
+	
+	public void setWinners(Player player)
+	{
+		gameOver = true;
+		winningPlayer = player;
 	}
 	
 	//----------------------Getters and Setters----------------------\\

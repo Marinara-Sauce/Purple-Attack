@@ -26,6 +26,8 @@ public class Game
 	
 	private BitcoinMiner bitcoin;
 	
+	private boolean gameOver;
+	
 	public Game()
 	{
 		input = new Scanner(System.in);
@@ -41,6 +43,13 @@ public class Game
 		if (!potentialName.isEmpty())
 		{
 			name = potentialName;
+			try {
+				new ProcessBuilder("cmd", "/c", "title Purple Attack: Playing As: " + name).inheritIO().start().waitFor();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else
 		{
@@ -52,17 +61,26 @@ public class Game
 	public void connect() throws IOException
 	{
 		setPlayerName();
-		System.out.println("Enter the Server IP (Enter localhost if you don't know what this is)\nType -1 to Go Back");
+		System.out.println("Enter the Server IP (Leave Blank for Localhost)\nType -1 to Go Back");
 		while (true)
 		{
 			String selection = input.nextLine();
+			
 			if (selection.equals("-1")) return;
+			else if (selection.isEmpty()) selection = "localhost";
+			
 			try
 			{
 				System.out.print("Connecting...");
 				socket = new Socket(selection, 59989);
 				System.out.println(" Successs! ");
 				initConnection();
+				
+				//After game ends
+				socket.close();
+				out.close();
+				in.close();
+				break;
 			}
 			catch (Exception e)
 			{
@@ -104,12 +122,17 @@ public class Game
 				System.out.println("Game Starting...1");
 			
 			else if (message.equals("STARTGAME"))
+			{
 				startGame();
+				break;
+			}
 		}
 	}
 	
 	public void startGame()
 	{
+		gameOver = false;
+	
 		playBootSequence();
 		
 		inventory = new Inventory();
@@ -123,7 +146,7 @@ public class Game
 		System.out.println("Begin entering commands. Type help for options");
 		
 		//This is where commands run and are processed
-		while(true)
+		while(!gameOver)
 		{
 			String command = getInput();
 			
@@ -187,11 +210,17 @@ public class Game
 				else if (command.startsWith("password"))
 					passwordDialog(command);
 				
+				else if (command.startsWith("EndGame"))
+					endGame(true);
+				
 				else
 					System.out.println("Unknown command! Type help for a list of commands");
 			}
 			bitcoin.updateBitcoinAmount();
 		}
+		//Game Ended at this point
+		clearConsole();
+		return;
 	}
 	
 	//Gets the results of the command from the server. Called from within commands.
@@ -278,7 +307,15 @@ public class Game
 		{
 			String line = in.nextLine();
 			//if (line.startsWith("C:"))
-			if (!line.isEmpty() && !line.equals("CDFAILED")) 
+			if (line.startsWith("GAMEOVER"))
+			{
+				//Run Game Over Dialog
+				String result = line.replace("GAMEOVER", "");
+				if (result.equals("WIN")) endGame(true);
+				else if (result.equals("LOSE")) endGame(false);
+				else System.err.println("Unknown Win Condition: " + result);
+			}
+			else if (!line.isEmpty() && !line.equals("CDFAILED")) 
 			{
 				System.out.print(line);
 				break;
@@ -287,6 +324,63 @@ public class Game
 		
 		System.out.print(" > ");
 		return input.nextLine();
+	}
+	
+	public void endGame(boolean won)
+	{
+		gameOver = true;
+		if (won)
+		{
+			clearConsole();
+			animatedPrint("Congradulations");
+			delay(1000);
+			animatedPrint("We used the password to look into the database. It worked.");
+			delay(1000);
+			animatedPrint("Thanks to you, we were able to confirm that they have indeed stole our cirriculumn. We contacted Mr. Atsoc to take legal action.");
+			delay(1000);
+			animatedPrint("Good work out there. You saved AP Computer Science A");
+			delay(1000);
+			animatedPrint("-Eric");
+			delay(1000);
+			System.out.println("");
+			delay(5000);
+			
+			//Load the victory screen
+			List<String> vicScreen = getVictoryScreenText();
+			
+			for (int i = 0 ; i < vicScreen.size() ; i++)
+				System.out.println(vicScreen.get(i));
+		}
+		else
+		{
+			clearConsole();
+			animatedPrint("You Lost");
+			delay(1000);
+			animatedPrint("The opponent stole our password, they now have access to our cirriculumn!");
+			delay(1000);
+			animatedPrint("You failed to please me, you are now doomed to 50s for the rest of the semester.");
+			delay(1000);
+			animatedPrint("Goodbye");
+			delay(1000);
+			animatedPrint("-Eric");
+			delay(5000);
+			System.out.println("");
+		}
+		
+		System.out.println("Press Enter to Return to Main Menu");
+		input.nextLine();
+	}
+	
+	//Prints the string one character at a time. Used in endGame
+	public void animatedPrint(String line)
+	{
+		for (int i = 0 ; i < line.length() ; i++)
+		{
+			System.out.print(line.charAt(i));
+			delay(25);
+		}
+		
+		System.out.println("");
 	}
 	
 	//-------------------------COMMAND FUNCTIONS---------------------------//
@@ -305,6 +399,25 @@ public class Game
 		
 		System.out.println("Checking password: " + password);
 		out.println("PASSWORD" + password);
+		
+		delay(50);
+		
+		while (in.hasNextLine())
+		{
+			String line = in.nextLine();
+			if (line.equals("PASSWORDCORRECT"))
+			{
+				System.out.println("Access Granted!");
+				delay(2500);
+				break;
+			}
+			else if (line.equals("PASSWORDINCORRECT"))
+			{
+				System.out.println("Access Denied!");
+				delay(2500);
+				break;
+			}
+		}
 	}
 	
 	public void connect(String command)
@@ -743,13 +856,36 @@ public class Game
 			{
 				text.add(textInput.nextLine());
 			}
-			textInput.close();
+			//textInput.close();
 			
 			return text;
 		} 
 		catch (FileNotFoundException e) 
 		{
 			System.err.println("Could not locate BootSequence.txt!");
+			System.exit(1);
+		}
+		
+		return null;
+	}
+	
+	private List<String> getVictoryScreenText()
+	{
+		List<String> text = new ArrayList<String>();
+		File inFile = new File("VictoryScreen.txt");
+		try
+		{
+			Scanner textInput = new Scanner(inFile);
+			while (textInput.hasNextLine())
+			{
+				text.add(textInput.nextLine());
+			}
+			
+			return text;
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println("Could not locate VictoryScreen.txt!");
 			System.exit(1);
 		}
 		

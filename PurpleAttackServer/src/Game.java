@@ -99,7 +99,9 @@ public class Game
 	
 	public void endGame(Player winner)
 	{
-		
+		for (int i = 0 ; i < players.size() ; i++)
+			players.get(i).setWinners(winner);
+			
 	}
 	
 	//Waits until all clients have a certain message

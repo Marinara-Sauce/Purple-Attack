@@ -213,7 +213,6 @@ public class Inventory {
 				System.err.println("Please enter an number!");
 			}
 		}
-		in.close();
 		return input;
 	}
 	

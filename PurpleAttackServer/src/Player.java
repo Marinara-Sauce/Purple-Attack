@@ -21,6 +21,7 @@ public class Player
 	private Scanner in;
 	
 	private String opponentName;
+	private String opponentPassword;
 	
 	private List<Directory> homeDir = new ArrayList<>();
 	private List<File> homeFiles = new ArrayList<>();
@@ -352,6 +353,24 @@ public class Player
 				}
 			}
 		}
+		
+		if (command.startsWith("PASSWORD"))
+		{
+			String password = command.replace("PASSWORD", "");
+			System.out.println(name + " is attempting to enter a password: " + password);
+			
+			if (password.equals(opponentPassword))
+			{
+				game.endGame(this);
+				out.println("PASSWORDCORRECT");
+			}
+			else
+			{
+				out.println("PASSWORDINCORRECT");
+			}
+			
+			return;
+		}
 	}
 	
 	//Sets up a file system for the game
@@ -555,5 +574,21 @@ public class Player
 
 	public void setBaseDir(Directory baseDir) {
 		this.baseDir = baseDir;
+	}
+
+	public String getOpponentPassword() {
+		return opponentPassword;
+	}
+
+	public void setOpponentPassword(String opponentPassword) {
+		this.opponentPassword = opponentPassword;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

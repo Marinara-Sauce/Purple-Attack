@@ -183,6 +183,10 @@ public class Game
 				
 				else if (command.startsWith("inventory"))
 					inventory.processCommand(command);
+				
+				else if (command.startsWith("password"))
+					passwordDialog(command);
+				
 				else
 					System.out.println("Unknown command! Type help for a list of commands");
 			}
@@ -286,6 +290,22 @@ public class Game
 	}
 	
 	//-------------------------COMMAND FUNCTIONS---------------------------//
+	
+	public void passwordDialog(String command)
+	{
+		String password;
+		
+		if (command.length() == "password".length())
+		{
+			System.out.println("Enter a password to submit");
+			password = input.nextLine();
+		}
+		else
+			password = command.replace("password ", "");
+		
+		System.out.println("Checking password: " + password);
+		out.println("PASSWORD" + password);
+	}
 	
 	public void connect(String command)
 	{

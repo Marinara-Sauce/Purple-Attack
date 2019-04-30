@@ -91,7 +91,15 @@ public class Game
 		for (int i = 0 ; i < players.size() ; i++)
 			players.get(i).setupFileSystem();
 
+		players.get(0).setOpponentPassword(players.get(1).getPassword());
+		players.get(1).setOpponentPassword(players.get(0).getPassword());
+		
 		broadcastToAll("OPENTERMINALS");
+	}
+	
+	public void endGame(Player winner)
+	{
+		
 	}
 	
 	//Waits until all clients have a certain message

@@ -306,15 +306,27 @@ public class Game
 		while (in.hasNextLine())
 		{
 			String line = in.nextLine();
-			//if (line.startsWith("C:"))
+			
 			if (line.startsWith("GAMEOVER"))
 			{
 				//Run Game Over Dialog
 				String result = line.replace("GAMEOVER", "");
-				if (result.equals("WIN")) endGame(true);
-				else if (result.equals("LOSE")) endGame(false);
+				
+				if (result.equals("WIN")) 
+				{
+					endGame(true);
+					return "";
+				}
+				
+				else if (result.equals("LOSE"))
+				{
+					endGame(true);
+					return "";
+				}
+				
 				else System.err.println("Unknown Win Condition: " + result);
 			}
+			
 			else if (!line.isEmpty() && !line.equals("CDFAILED")) 
 			{
 				System.out.print(line);
@@ -628,6 +640,11 @@ public class Game
 				System.out.println("Could not find file: " + fileName);
 				break;
 			}
+			else if (line.equals("PROTECTED"))
+			{
+				System.out.println("Failed to move! Access Denied!");
+				break;
+			}
 		}
 	}
 	
@@ -661,6 +678,11 @@ public class Game
 				System.out.println("Could not find file: " + fileName);
 				break;
 			}
+			else if (line.equals("PROTECTED"))
+			{
+				System.out.println("B What did you do wrong");
+				break;
+			}
 		}
 	}
 	
@@ -692,6 +714,11 @@ public class Game
 			else if (result.equals("FAILED"))
 			{
 				System.out.println("Failed to remove file " + fileName + ". File does not exsist!");
+				break;
+			}
+			else if (result.equals("PROTECTED"))
+			{
+				System.out.println("Failed to remove directory! Access denied!");
 				break;
 			}
 		}
@@ -780,6 +807,11 @@ public class Game
 			else if (inLine.equals("FAILED"))
 			{
 				System.out.println("Could not find directory " + dir);
+				break;
+			}
+			else if (inLine.equals("PROTECTED"))
+			{
+				System.out.println("Failed to remove! Access Denied!");
 				break;
 			}
 		}

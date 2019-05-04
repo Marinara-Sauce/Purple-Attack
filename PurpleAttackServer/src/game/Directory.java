@@ -14,12 +14,14 @@ public class Directory
 	private String name; //Name of directory
 	private String password; //Password to access directory
 	private Directory parent; //A reference to the parent directory, equals null if in base
+	private boolean protect;
 	
 	public Directory(String name)
 	{
 		this.name = name;
 		parent = null;
 		password = null;
+		protect = false;
 		
 		files = new ArrayList<>();
 		directorys = new ArrayList<>();
@@ -30,6 +32,7 @@ public class Directory
 		this.name = name;
 		this.parent = parent;
 		password = null;
+		protect = false;
 		
 		files = new ArrayList<>();
 		directorys = new ArrayList<>();
@@ -39,6 +42,7 @@ public class Directory
 	{
 		this.name = name;
 		this.password = password;
+		protect = true;
 		parent = null;
 		
 		files = new ArrayList<>();
@@ -50,7 +54,7 @@ public class Directory
 		this.name = name;
 		this.password = password;
 		this.parent = parent;
-		
+		protect = true;
 		files = new ArrayList<>();
 		directorys = new ArrayList<>();
 	}
@@ -160,5 +164,13 @@ public class Directory
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isProtect() {
+		return protect;
+	}
+
+	public void setProtect(boolean protect) {
+		this.protect = protect;
 	}
 }

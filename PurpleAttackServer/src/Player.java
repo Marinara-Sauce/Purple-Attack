@@ -68,314 +68,42 @@ public class Player
 		if (command.equals("dir"))
 			currentDir.displayDirectory(out);
 		
-		if (command.contains("CAT"))
-		{
-			System.out.println("Running CAT Command for " + name);
-			
-			List<File> files = currentDir.getFiles();
-			
-			String fileName = command.replace("CAT", "");
-			
-			boolean foundFile = false;
-			for (int i = 0 ; i < files.size() ; i++)
-			{
-				if (files.get(i) instanceof TextFile && files.get(i).getName().equals(fileName))
-				{
-					foundFile = true;
-					TextFile tFile = (TextFile)(files.get(i));
-					tFile.readContents(out);
-				}
-					
-			}
-			
-			if (foundFile)
-				out.println("ENDOFLINE");
-			else
-				out.println("FAILURE");
-			
-			System.out.println("Finished CAT Command");
-		}
+		else if (command.contains("CAT"))
+			cat(command);
 		
-		if (command.contains("MKDIR"))
-		{
-			System.out.println("Running MKDIR Command for " + name);
-			String dirName = command.replace("MKDIR", "");
-			currentDir.addDirectory(dirName);
-			System.out.println("Directory " + dirName + " Successfully Created!");
-		}
+		else if (command.contains("MKDIR"))
+			mkdir(command);
 		
-		if (command.contains("CD"))
-		{
-			System.out.println("Running CD Command for " + name);
-			String dir = command.replace("CD", "");
-			String password = null;
-			
-			if (dir.contains(":"))
-			{
-				//Gets the passed in password
-				password = dir.split(":")[1];
-				dir = dir.split(":")[0];
-			}
-			
-			Directory dirToChange = null;
-			
-			if (dir.equals("..") && currentDir.getParent() != null)
-			{
-				currentDir = currentDir.getParent();
-				out.println("SUCCESS");
-				return;
-			}
-			
-			for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
-			{
-				if (currentDir.getDirectorys().get(i).getName().equals(dir))
-				{
-					dirToChange = currentDir.getDirectorys().get(i);
-					
-					if (dirToChange.getPassword() != null)
-					{
-						if (password != null && password.equals(dirToChange.getPassword()))
-						{
-							currentDir = dirToChange;
-							out.println("SUCCESS");
-							return;
-						}
-						else
-						{
-							out.println("PASSWORDFAILED");
-							return;
-						}
-					}
-					else
-					{
-						currentDir = dirToChange;
-						out.println("SUCCESS");
-					}
-				}
-			}
-			
-			out.println("CDFAILED");
-		}
+		else if (command.contains("CD"))
+			cd(command);
 		
-		if (command.contains("RMDIR"))
-		{
-			System.out.println("Running RMDIR Command for " + name);
-			
-			String dir = command.replace("RMDIR", "");
-			
-			boolean foundDirectory = false;
-			for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
-			{
-				if (currentDir.getDirectorys().get(i).getName().equals(dir))
-				{
-					foundDirectory = true;
-					currentDir.getDirectorys().remove(currentDir.getDirectorys().get(i));
-				}
-			}
-			
-			if (foundDirectory)
-			{
-				out.println("SUCCESS");
-				System.out.println("Success!");
-			}
-			else
-			{
-				out.println("FAILED");
-				System.out.println("Failed!");
-			}
-		}
+		else if (command.contains("RMDIR"))
+			rmdir(command);
 		
-		if (command.contains("NEWTEXT"))
-		{
-			//The string will be passed in as NEWTEXTName:TextInfo
-			String commandIn = command.replace("NEWTEXT", "");
-			String fileInfo = commandIn.split(":")[1];
-			
-			TextFile newFile = new TextFile(commandIn.split(":")[0]);
-			newFile.setContents(fileInfo);
-			
-			currentDir.addFile(newFile);
-		}
+		else if (command.contains("NEWTEXT"))
+			newText(command);
 		
-		if (command.contains("REMOVE"))
-		{
-			String fileName = command.replace("REMOVE", "");
-			boolean success = false;
-			
-			for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
-			{
-				if (currentDir.getFiles().get(i).getName().equals(fileName))
-				{
-					currentDir.getFiles().remove(currentDir.getFiles().get(i));
-					success = true;
-				}
-			}
-			
-			if (success)
-				out.println("SUCCESS");
-			else
-				out.println("FAILED");
-		}
+		else if (command.contains("REMOVE"))
+			rm(command);
 		
-		if (command.contains("CP"))
-		{
-			String fileName = command.replace("CP", "");
-			boolean success = false;
-			
-			for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
-			{
-				if (currentDir.getFiles().get(i).getName().equals(fileName))
-				{
-					clipboard(currentDir.getFiles().get(i), false);
-					success = true;
-				}
-			}
-			
-			if (!success)
-			{
-				for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
-				{
-					if (currentDir.getDirectorys().get(i).getName().equals(fileName))
-					{
-						clipboard(currentDir.getDirectorys().get(i), false);
-						success = true;
-					}
-				}
-			}
-			
-			if (success)
-				out.println("SUCCESS");
-			else
-				out.println("FAILED");
-		}
+		else if (command.contains("CP"))
+			cp(command);
 		
-		if (command.contains("MV"))
-		{
-			String fileName = command.replace("MV", "");
-			boolean success = false;
-			
-			for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
-			{
-				if (currentDir.getFiles().get(i).getName().equals(fileName))
-				{
-					clipboard(currentDir.getFiles().get(i), true);
-					success = true;
-				}
-			}
-			
-			if (!success)
-			{
-				for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
-				{
-					if (currentDir.getDirectorys().get(i).getName().equals(fileName))
-					{
-						clipboard(currentDir.getDirectorys().get(i), true);
-						success = true;
-					}
-				}
-			}
-			
-			if (success)
-				out.println("SUCCESS");
-			else
-				out.println("FAILED");
-		}
+		else if (command.contains("MV"))
+			mv(command);
 		
-		if (command.contains("PASTE"))
-		{
-			if (copiedDirectory == null && copiedFile == null)
-			{
-				out.println("FAILED");
-				return;
-			}
-			
-			if (copiedDirectory == null)
-			{
-				currentDir.addFile(copiedFile);
-				
-				if (moveFile)
-					copiedFile = null;
-				
-				out.println("SUCCESS");
-			}
-			else if (copiedFile == null)
-			{
-				currentDir.addDirectory(copiedDirectory);
-				
-				if (moveFile)
-					copiedDirectory = null;
-				
-				out.println("SUCCESS");
-			}
-		}
+		else if (command.contains("PASTE"))
+			ps(command);
 		
-		if (command.equals("DISCONNECT"))
-		{
-			if (!connectedToOpponent)
-			{
-				out.println("DISCONNECTFAILED");
-				return;
-			}
-			
-			connectedToOpponent = false;
-			currentDir = baseDir;
-			System.out.println("Attempting to Disconnect");
-			out.println("DISCONNECTSUCCESS");
-			
-			return;
-		}
+		else if (command.equals("DISCONNECT"))
+			disconnect(command);
 		
-		if (command.contains("CONNECT"))
-		{
-			if (connectedToOpponent)
-			{
-				out.println("CONNECTFAILEDALLREADYCONNECTED");
-				return;
-			}
-			
-			String ip = command.replace("CONNECT", "");
-
-			//Checks if the ip is a website name or ip
-			if (ip.contains("."))
-			{
-				if (ip.equals(playerIP))
-				{
-					out.println("CONNECTFAILEDCONNECTTOSELF");
-					return;
-				}
-				else if (ip.equals(opponentIP))
-				{
-					out.println("CONNECTSUCCESS");
-					connectedToOpponent = true;
-					opponentCurrentDir = game.getOpponentBaseDirectory(this);
-					currentDir = opponentCurrentDir;
-					return;
-				}
-				else
-				{
-					out.println("CONNECTFAILEDWRONGIP");
-					return;
-				}
-			}
-		}
+		else if (command.contains("CONNECT"))
+			connect(command);
 		
-		if (command.startsWith("PASSWORD"))
-		{
-			String password = command.replace("PASSWORD", "");
-			System.out.println(name + " is attempting to enter a password: " + password);
-			
-			if (password.equals(opponentPassword))
-			{
-				out.println("PASSWORDCORRECT");
-				game.endGame(this);
-			}
-			else
-			{
-				out.println("PASSWORDINCORRECT");
-			}
-			
-			return;
-		}
+		else if (command.startsWith("PASSWORD"))
+			password(command);
+		
 	}
 	
 	//Sets up a file system for the game
@@ -515,6 +243,329 @@ public class Player
 		
 		if (move)
 			currentDir.getFiles().remove(file);
+	}
+	
+	//---------------------------COMMANDS-----------------------------------------------//
+	
+	private void cat(String command)
+	{
+		System.out.println("Running CAT Command for " + name);
+		
+		List<File> files = currentDir.getFiles();
+		
+		String fileName = command.replace("CAT", "");
+		
+		boolean foundFile = false;
+		for (int i = 0 ; i < files.size() ; i++)
+		{
+			if (files.get(i) instanceof TextFile && files.get(i).getName().equals(fileName))
+			{
+				foundFile = true;
+				TextFile tFile = (TextFile)(files.get(i));
+				tFile.readContents(out);
+			}
+				
+		}
+		
+		if (foundFile)
+			out.println("ENDOFLINE");
+		else
+			out.println("FAILURE");
+		
+		System.out.println("Finished CAT Command");
+	}
+	
+	private void mkdir(String command)
+	{
+		System.out.println("Running MKDIR Command for " + name);
+		String dirName = command.replace("MKDIR", "");
+		currentDir.addDirectory(dirName);
+		System.out.println("Directory " + dirName + " Successfully Created!");
+	}
+	
+	private void rmdir(String command)
+	{
+		System.out.println("Running RMDIR Command for " + name);
+		
+		String dir = command.replace("RMDIR", "");
+		
+		for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
+		{
+			if (currentDir.getDirectorys().get(i).getName().equals(dir))
+			{
+				if (!currentDir.getDirectorys().get(i).isProtect())
+				{
+					currentDir.getDirectorys().remove(currentDir.getDirectorys().get(i));
+					out.println("SUCCESS");
+					return;
+				}
+				else
+				{
+					out.println("PROTECTED");
+					return;
+				}
+			}
+		}
+	}
+	
+	private void cd(String command)
+	{
+		System.out.println("Running CD Command for " + name);
+		String dir = command.replace("CD", "");
+		String password = null;
+		
+		if (dir.contains(":"))
+		{
+			//Gets the passed in password
+			password = dir.split(":")[1];
+			dir = dir.split(":")[0];
+		}
+		
+		Directory dirToChange = null;
+		
+		if (dir.equals("..") && currentDir.getParent() != null)
+		{
+			currentDir = currentDir.getParent();
+			out.println("SUCCESS");
+			return;
+		}
+		
+		for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
+		{
+			if (currentDir.getDirectorys().get(i).getName().equals(dir))
+			{
+				dirToChange = currentDir.getDirectorys().get(i);
+				
+				if (dirToChange.getPassword() != null)
+				{
+					if (password != null && password.equals(dirToChange.getPassword()))
+					{
+						currentDir = dirToChange;
+						out.println("SUCCESS");
+						return;
+					}
+					else
+					{
+						out.println("PASSWORDFAILED");
+						return;
+					}
+				}
+				else
+				{
+					currentDir = dirToChange;
+					out.println("SUCCESS");
+				}
+			}
+		}
+		
+		out.println("CDFAILED");
+	}
+	
+	private void newText(String command)
+	{
+		//The string will be passed in as NEWTEXTName:TextInfo
+		String commandIn = command.replace("NEWTEXT", "");
+		String fileInfo = commandIn.split(":")[1];
+		
+		TextFile newFile = new TextFile(commandIn.split(":")[0]);
+		newFile.setContents(fileInfo);
+		
+		currentDir.addFile(newFile);
+	}
+	
+	private void rm(String command)
+	{
+		String fileName = command.replace("REMOVE", "");
+		
+		for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
+		{
+			if (currentDir.getFiles().get(i).getName().equals(fileName))
+			{
+				//Check if protected
+				if (!currentDir.isProtect())
+				{
+					currentDir.getFiles().remove(currentDir.getFiles().get(i));
+					out.println("SUCCESS");
+					return;
+				}
+				else
+				{
+					out.println("PROTECTED");
+					return;
+				}
+			}
+		}
+		
+		out.println("FAILED");
+	}
+	
+	private void cp(String command)
+	{
+		String fileName = command.replace("CP", "");
+		
+		//Scans for files
+		for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
+		{
+			if (currentDir.getFiles().get(i).getName().equals(fileName))
+			{
+				clipboard(currentDir.getFiles().get(i), false);
+				out.println("SUCCESS");
+				return;
+			}
+		}
+
+		//Scans for directories
+		for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
+		{
+			if (currentDir.getDirectorys().get(i).getName().equals(fileName))
+			{
+				clipboard(currentDir.getDirectorys().get(i), false);
+				out.println("SUCCESS");
+				return;
+			}
+		}
+		
+		out.println("FAILED");
+	}
+	
+	private void mv(String command)
+	{
+		String fileName = command.replace("MV", "");
+		
+		for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
+		{
+			if (currentDir.getFiles().get(i).getName().equals(fileName))
+			{
+				if (!currentDir.isProtect())
+				{
+					clipboard(currentDir.getFiles().get(i), true);
+					out.println("SUCCESS");
+					return;
+				}
+				else
+				{
+					out.println("PROTECTED");
+					return;
+				}
+			}
+		}
+		
+		//Check for Directories
+		for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
+		{
+			if (currentDir.getDirectorys().get(i).getName().equals(fileName))
+			{
+				if (!currentDir.getDirectorys().get(i).isProtect())
+				{
+					clipboard(currentDir.getDirectorys().get(i), true);
+					out.println("SUCCESS");
+					return;
+				}
+				else
+				{
+					out.println("PROTECTED");
+					return;
+				}
+			}
+		}
+		
+		out.println("FAILED");
+	}
+	
+	private void ps(String command)
+	{
+		if (copiedDirectory == null && copiedFile == null)
+		{
+			out.println("FAILED");
+			return;
+		}
+		
+		if (copiedDirectory == null)
+		{
+			currentDir.addFile(copiedFile);
+			
+			if (moveFile)
+				copiedFile = null;
+			
+			out.println("SUCCESS");
+		}
+		else if (copiedFile == null)
+		{
+			currentDir.addDirectory(copiedDirectory);
+			
+			if (moveFile)
+				copiedDirectory = null;
+			
+			out.println("SUCCESS");
+		}
+	}
+	
+	private void connect(String command)
+	{
+		if (connectedToOpponent)
+		{
+			out.println("CONNECTFAILEDALLREADYCONNECTED");
+			return;
+		}
+		
+		String ip = command.replace("CONNECT", "");
+
+		//Checks if the ip is a website name or ip
+		if (ip.contains("."))
+		{
+			if (ip.equals(playerIP))
+			{
+				out.println("CONNECTFAILEDCONNECTTOSELF");
+				return;
+			}
+			else if (ip.equals(opponentIP))
+			{
+				out.println("CONNECTSUCCESS");
+				connectedToOpponent = true;
+				opponentCurrentDir = game.getOpponentBaseDirectory(this);
+				currentDir = opponentCurrentDir;
+				return;
+			}
+			else
+			{
+				out.println("CONNECTFAILEDWRONGIP");
+				return;
+			}
+		}
+	}
+	
+	private void disconnect(String command)
+	{
+		if (!connectedToOpponent)
+		{
+			out.println("DISCONNECTFAILED");
+			return;
+		}
+		
+		connectedToOpponent = false;
+		currentDir = baseDir;
+		System.out.println("Attempting to Disconnect");
+		out.println("DISCONNECTSUCCESS");
+		
+		return;
+	}
+	
+	private void password(String command)
+	{
+		String password = command.replace("PASSWORD", "");
+		System.out.println(name + " is attempting to enter a password: " + password);
+		
+		if (password.equals(opponentPassword))
+		{
+			out.println("PASSWORDCORRECT");
+			game.endGame(this);
+		}
+		else
+		{
+			out.println("PASSWORDINCORRECT");
+		}
+		
+		return;
 	}
 	
 	//---------------------------Util Checking Methods and Stuff-------------------------\\

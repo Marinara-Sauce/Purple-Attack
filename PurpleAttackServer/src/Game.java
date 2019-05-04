@@ -8,6 +8,7 @@ import game.Directory;
 public class Game 
 {
 	private List<Player> players = new ArrayList<>();
+	private AudioPlayer music = new AudioPlayer();
 	
 	//Adds a player to the game
 	public void addPlayer(Player player)
@@ -95,13 +96,15 @@ public class Game
 		players.get(1).setOpponentPassword(players.get(0).getPassword());
 		
 		broadcastToAll("OPENTERMINALS");
+		delay(9000);
+		
+		music.playAudio("resources/Music.wav");
 	}
 	
 	public void endGame(Player winner)
 	{
 		for (int i = 0 ; i < players.size() ; i++)
 			players.get(i).setWinners(winner);
-			
 	}
 	
 	//Waits until all clients have a certain message

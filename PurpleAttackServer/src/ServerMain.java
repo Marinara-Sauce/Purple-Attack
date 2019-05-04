@@ -1,5 +1,3 @@
-//1103 Total Lines
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
@@ -11,11 +9,13 @@ public class ServerMain {
 		System.out.println("Purple Attack: Created by Dan Bliss: Server");
 		System.out.println("////-------------------------------////");
 		
-		System.out.print("Creating Game...");
+		Settings.setup();
+		
 		Game game = new Game();
-		System.out.println("Success!");
 		System.out.println("The Server is running!");
+		
 		ExecutorService pool = Executors.newFixedThreadPool(20);
+		
 		try (ServerSocket listener = new ServerSocket(59989))
 		{
 			while (true)

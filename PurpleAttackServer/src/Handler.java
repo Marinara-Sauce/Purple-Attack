@@ -30,7 +30,6 @@ public class Handler implements Runnable
 				{
 					ticks = 0; //Reset the tick timer
 					String input = in.nextLine();
-					System.out.println("Received: " + input);
 					if (input.contains("NEWPLAYER"))
 					{
 						String playerName = input.replace("NEWPLAYER", "");
@@ -39,6 +38,10 @@ public class Handler implements Runnable
 					else if (input.equals("REQUESTCURRENTDIR"))
 					{
 						game.getPlayerBySocket(socket).getCurrentDirectory();
+					}
+					else if (input.equals("TERMINATECONNECTION"))
+					{
+						game.terminateOtherConnection(socket);
 					}
 					else
 					{

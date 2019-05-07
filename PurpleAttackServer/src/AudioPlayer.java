@@ -28,7 +28,10 @@ public class AudioPlayer {
 		} 
 		catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) 
 		{
-			e.printStackTrace();
+			//The music I am using was not added to the repo due to A. File size and B. Copyright.
+			//You can use your own code, or use the music I used (First 20 Minutes). Either way, name the file music.wav and put it in the res folder
+			//Music used: https://youtu.be/UNlopG6VFkM
+			System.err.println("Could not find file: " + fileName);
 		}	
 	}
 	

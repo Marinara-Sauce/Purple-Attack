@@ -137,6 +137,21 @@ public class Game
 		return otherPlayer.getBaseDir();
 	}
 	
+	//Called from the handler. Sends a player that sent the terminate command, and terminates the other players connection
+	public void terminateOtherConnection(Socket player)
+	{
+		Player opponent = null;
+		
+		for (int i = 0 ; i < players.size() ; i++)
+		{
+			if (players.get(i).getSocket() == player)
+				opponent = players.get((players.size() - 1) - i); //Gets the other player
+		}
+		
+		if (opponent != null)
+			opponent.disconnect("");
+	}
+	
 	public void delay(int millis)
 	{
 		try

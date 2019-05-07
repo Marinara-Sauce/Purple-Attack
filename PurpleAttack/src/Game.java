@@ -395,6 +395,21 @@ public class Game
 		System.out.println("");
 	}
 	
+	//Terminates the opponents connection
+	public void terminateOpponentConnection()
+	{
+		out.println("TERMINATECONNECTION");
+		System.out.println("Connection Blocker Terminated a Connection!");
+		
+		inventory.getConnectionBlocker().terminatedConnection();
+	}
+	
+	//Called from getInput when it detects an opponent connected
+	public void opponentConnected()
+	{
+		inventory.getConnectionBlocker().startTimer();
+	}
+	
 	//-------------------------COMMAND FUNCTIONS---------------------------//
 	
 	public void passwordDialog(String command)

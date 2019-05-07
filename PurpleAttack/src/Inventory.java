@@ -12,6 +12,9 @@ public class Inventory {
 	private Processor equippedProcessor;
 	private NetworkingCard equippedNetworkingCard;
 	
+	private ConnectionBlocker connectionBlocker;
+	private int blockerLevel;
+	
 	public Inventory() 
 	{
 		processors = new ArrayList<>();
@@ -21,6 +24,9 @@ public class Inventory {
 		networkingCards = new ArrayList<>();
 		networkingCards.add(new NetworkingCard());
 		equippedNetworkingCard = networkingCards.get(0);
+		
+		connectionBlocker = new ConnectionBlocker(1, equippedProcessor);
+		blockerLevel = 0;
 	}
 	
 	public void addToInventory(Processor processor)
@@ -53,6 +59,16 @@ public class Inventory {
 			equipItem();
 		else
 			System.out.println("Unknown Command! Type inventory help for a list of commands!");
+	}
+	
+	public void upgradeFirewall(int version)
+	{
+		connectionBlocker = new ConnectionBlocker(version, equippedProcessor);
+	}
+	
+	public void upgradeBlocker(int version)
+	{
+		blockerLevel = version;
 	}
 	
 	//---------------------------COMMANDS--------------------------------//
@@ -148,6 +164,7 @@ public class Inventory {
 			else
 			{
 				equippedProcessor = validCPUS.get(selection - 1);
+				connectionBlocker.setProcessor(equippedProcessor);
 				System.out.println("Euqipped " + validCPUS.get(selection - 1).getName());
 			}
 		}
@@ -248,5 +265,21 @@ public class Inventory {
 
 	public void setEquippedNetworkingCard(NetworkingCard equippedNetworkingCard) {
 		this.equippedNetworkingCard = equippedNetworkingCard;
+	}
+
+	public int getBlockerLevel() {
+		return blockerLevel;
+	}
+
+	public void setBlockerLevel(int blockerLevel) {
+		this.blockerLevel = blockerLevel;
+	}
+
+	public ConnectionBlocker getConnectionBlocker() {
+		return connectionBlocker;
+	}
+
+	public void setConnectionBlocker(ConnectionBlocker connectionBlocker) {
+		this.connectionBlocker = connectionBlocker;
 	}
 }

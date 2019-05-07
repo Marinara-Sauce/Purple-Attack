@@ -244,6 +244,7 @@ public class Player
 		if (move)
 			currentDir.getFiles().remove(file);
 	}
+
 	
 	//---------------------------COMMANDS-----------------------------------------------//
 	
@@ -534,7 +535,7 @@ public class Player
 		}
 	}
 	
-	private void disconnect(String command)
+	public void disconnect(String command)
 	{
 		if (!connectedToOpponent)
 		{

@@ -15,10 +15,9 @@ public class Core
 	
 	public String getFocusAsString()
 	{
-		if (focus == 0) return "Inactive";
-		else if (focus == 1) return "Bitcoin Mining";
+		final String focuses[] = {"Inactive", "Bitcoin Mining", "Connection Blocker", "Firewall"};
 		
-		return null;
+		return focuses[focus];
 	}
 	
 	public int getFocus()

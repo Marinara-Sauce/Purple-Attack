@@ -15,6 +15,8 @@ public class Inventory {
 	private ConnectionBlocker connectionBlocker;
 	private int blockerLevel;
 	
+	private Firewall firewall;
+	
 	public Inventory() 
 	{
 		processors = new ArrayList<>();
@@ -26,6 +28,7 @@ public class Inventory {
 		equippedNetworkingCard = networkingCards.get(0);
 		
 		connectionBlocker = new ConnectionBlocker(1, equippedProcessor);
+		firewall = new Firewall(1, equippedProcessor);
 		blockerLevel = 0;
 	}
 	
@@ -61,9 +64,14 @@ public class Inventory {
 			System.out.println("Unknown Command! Type inventory help for a list of commands!");
 	}
 	
-	public void upgradeFirewall(int version)
+	public void upgradeConnectionBlocker(int version)
 	{
 		connectionBlocker = new ConnectionBlocker(version, equippedProcessor);
+	}
+	
+	public void upgradeFirewall(int version)
+	{
+		firewall = new Firewall(version, equippedProcessor);
 	}
 	
 	public void upgradeBlocker(int version)
@@ -281,5 +289,13 @@ public class Inventory {
 
 	public void setConnectionBlocker(ConnectionBlocker connectionBlocker) {
 		this.connectionBlocker = connectionBlocker;
+	}
+
+	public Firewall getFirewall() {
+		return firewall;
+	}
+
+	public void setFirewall(Firewall firewall) {
+		this.firewall = firewall;
 	}
 }

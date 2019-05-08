@@ -24,6 +24,7 @@ public class ConnectionBlocker {
 	{
 		startTime = System.currentTimeMillis();
 		opponentConnected = true;
+		//System.out.println("Blocker Running");
 	}
 
 	//Gets number of cores running this
@@ -34,18 +35,31 @@ public class ConnectionBlocker {
 	
 	public boolean terminated()
 	{
+		if (!opponentConnected) return false;
+		
 		long startTimeSeconds = startTime / 1000;
 		long currentTimeSeconds = System.currentTimeMillis() / 1000;
 		long timePassed = currentTimeSeconds - startTimeSeconds;
 		
-		final long DIFF_NEEDED = (60 - (15 * level)) - (2 * numCores());
+		final long DIFF_NEEDED = (75 - (15 * level)) - (2 * numCores());
 		
 		return timePassed >= DIFF_NEEDED;
 	}
 
 	public void terminatedConnection()
 	{
-		opponentConnected = true;
+		opponentConnected = false;
+		//System.out.println("Blocker Terminated");
+	}
+	
+	//Checks if the player can terminate, then does so
+	public void checkForTerminate()
+	{
+		if (terminated())
+		{
+			terminatedConnection();
+			System.out.println("A Connection Was Terminated by the Connection Blocker!");
+		}
 	}
 	
 	public int getLevel() {

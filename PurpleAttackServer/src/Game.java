@@ -149,7 +149,41 @@ public class Game
 		}
 		
 		if (opponent != null)
-			opponent.disconnect("");
+			opponent.disconnect("NOPRINTLN");
+	}
+	
+	//Called from a player, notifys the other player that they disconnected. Passes in the player that disconnected
+	public void notifyClientDisconnected(Socket player)
+	{
+		Player opponent = null;
+		
+		for (int i = 0 ; i < players.size() ; i++)
+		{
+			if (players.get(i).getSocket() == player)
+				opponent = players.get((players.size() - 1) - i);
+		}
+		
+		if (opponent != null)
+		{
+			opponent.getPrintWriter().println("OPPONENTDISCONNECTED");
+		}
+	}
+	
+	//Called from a player, does the same as above function but for connections
+	public void notifyClientConnected(Socket player)
+	{
+		Player opponent = null;
+		
+		for (int i = 0 ; i < players.size() ; i++)
+		{
+			if (players.get(i).getSocket() == player)
+				opponent = players.get((players.size() - 1) - i);
+		}
+		
+		if (opponent != null)
+		{
+			opponent.getPrintWriter().println("OPPONENTCONNECTED");
+		}
 	}
 	
 	public void delay(int millis)

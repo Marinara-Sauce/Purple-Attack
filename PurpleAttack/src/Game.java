@@ -148,6 +148,11 @@ public class Game
 		//This is where commands run and are processed
 		while(!gameOver)
 		{
+			//Functions that need to run on the tick (well, sort of the tick)
+			
+			if (inventory.getConnectionBlocker().terminated())
+				terminateOpponentConnection();
+			
 			String command = getInput();
 			
 			//Sends commands to the bitcoin class
@@ -326,7 +331,18 @@ public class Game
 				
 				else System.err.println("Unknown Win Condition: " + result);
 			}
-			
+			else if (line.equals("OPPONENTCONNECTED"))
+			{
+				opponentConnected();
+			}
+			else if (line.equals("OPPONENTDISCONNECTED"))
+			{
+				inventory.getConnectionBlocker().terminatedConnection();
+			}
+			else if (line.equals("DISCONNECTKICKED"))
+			{
+				System.out.println("The connection was terminated by the Connection Blocker!");
+			}
 			else if (!line.isEmpty() && !line.equals("CDFAILED")) 
 			{
 				System.out.print(line);
@@ -410,6 +426,10 @@ public class Game
 		inventory.getConnectionBlocker().startTimer();
 	}
 	
+	public void opponentDisconnected()
+	{
+		inventory.getConnectionBlocker().terminatedConnection();
+	}
 	//-------------------------COMMAND FUNCTIONS---------------------------//
 	
 	public void passwordDialog(String command)

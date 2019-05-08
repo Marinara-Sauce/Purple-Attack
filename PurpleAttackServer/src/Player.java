@@ -525,6 +525,9 @@ public class Player
 				connectedToOpponent = true;
 				opponentCurrentDir = game.getOpponentBaseDirectory(this);
 				currentDir = opponentCurrentDir;
+				
+				game.notifyClientConnected(socket);
+				
 				return;
 			}
 			else
@@ -546,7 +549,13 @@ public class Player
 		connectedToOpponent = false;
 		currentDir = baseDir;
 		System.out.println("Attempting to Disconnect");
-		out.println("DISCONNECTSUCCESS");
+		
+		if (!command.equals("NOPRINTLN"))
+			out.println("DISCONNECTSUCCESS");
+		else
+			out.println("DISCONNECTKICKED");
+		
+		game.notifyClientDisconnected(socket);
 		
 		return;
 	}
@@ -605,6 +614,11 @@ public class Player
 	public Socket getSocket()
 	{
 		return socket;
+	}
+	
+	public PrintWriter getPrintWriter()
+	{
+		return out;
 	}
 	
 	public String getName()

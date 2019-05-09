@@ -6,6 +6,8 @@ import java.util.Scanner;
 //Stores all the items the user may access when playing the game
 public class Inventory {
 
+	private Game game;
+	
 	private List<Processor> processors;
 	private List<NetworkingCard> networkingCards;
 	
@@ -17,10 +19,12 @@ public class Inventory {
 	
 	private Firewall firewall;
 	
-	public Inventory() 
+	public Inventory(Game game) 
 	{
+		this.game = game;
+		
 		processors = new ArrayList<>();
-		processors.add(new Processor("Intel i5 6500", 4));
+		processors.add(new Processor("Intel i5 6500", 4, game));
 		equippedProcessor = processors.get(0);
 		
 		networkingCards = new ArrayList<>();
@@ -28,7 +32,7 @@ public class Inventory {
 		equippedNetworkingCard = networkingCards.get(0);
 		
 		connectionBlocker = new ConnectionBlocker(1, equippedProcessor);
-		firewall = new Firewall(1, equippedProcessor);
+		firewall = new Firewall(1, equippedProcessor, game);
 		blockerLevel = 0;
 	}
 	
@@ -71,7 +75,7 @@ public class Inventory {
 	
 	public void upgradeFirewall(int version)
 	{
-		firewall = new Firewall(version, equippedProcessor);
+		firewall = new Firewall(version, equippedProcessor, game);
 	}
 	
 	public void upgradeBlocker(int version)
@@ -114,6 +118,9 @@ public class Inventory {
 				System.out.print(" - ACTIVE");
 			System.out.println("");
 		}
+		
+		System.out.println("Connection Blocker: Running Version " + connectionBlocker.getLevel());
+		System.out.println("Firewall: Running Version " + firewall.getLevel());
 	}
 	
 	public void equipItem()

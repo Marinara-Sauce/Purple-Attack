@@ -135,7 +135,7 @@ public class Game
 	
 		playBootSequence();
 		
-		inventory = new Inventory();
+		inventory = new Inventory(this);
 		
 		//Inits Bitcoin and such
 		bitcoin = new BitcoinMiner(this, inventory.getEquippedProcessor());
@@ -527,6 +527,11 @@ public class Game
 					System.out.println("Failed to connect! Could not locate IP");
 					break;
 				}
+				else if (line.contentEquals("CONNECTFAILEDBLOCKED"))
+				{
+					System.out.println("Failed to connect! Blocked by Firewall!");
+					break;
+				}
 				else
 				{
 					break;
@@ -872,6 +877,11 @@ public class Game
 	public BitcoinMiner getBitcoinMiner()
 	{
 		return bitcoin;
+	}
+	
+	public PrintWriter getPrintWriter()
+	{
+		return out;
 	}
 	
 	public void delay(int time)

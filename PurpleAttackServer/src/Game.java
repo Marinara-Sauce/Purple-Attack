@@ -186,6 +186,18 @@ public class Game
 		}
 	}
 	
+	//Takes in a player, returns the other player
+	public Player getOpponent(Player player)
+	{
+		for (int i = 0 ; i < players.size() ; i++)
+		{
+			if (players.get(i) == player);
+				return players.get(1 - i);
+		}
+		
+		return null;
+	}
+	
 	public void delay(int millis)
 	{
 		try

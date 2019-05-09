@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 public class Processor 
 {
+	private Game game;
+	
 	private final String HELP_TEXT = "processor help - Displays this\nprocessor info - Views the current processor's information\nprocessor view-cores - View each cores current status\nprocessor edit-cores - Edits each cores current status";
 
 	private String name; //Processors Name
@@ -24,20 +26,22 @@ public class Processor
 	}
 	
 	//Used within inventory, used when adding item
-	public Processor(String name, int numCores)
+	public Processor(String name, int numCores, Game game)
 	{
 		this.numCores = numCores;
 		this.name = name;
 		
 		cores= new ArrayList<>();
+		this.game = game;
 		initCores();
 	}
 	
-	public Processor()
+	public Processor(Game game)
 	{
 		numCores = 4;
 		cores = new ArrayList<>();
 		
+		this.game = game;
 		initCores();
 	}
 	
@@ -130,6 +134,7 @@ public class Processor
 				}
 				
 				miner.updateMineRate();
+				game.getPrintWriter().println("FIREWALLCORES" + getNumFocusedCores(3));
 			}
 			catch (InputMismatchException e)
 			{

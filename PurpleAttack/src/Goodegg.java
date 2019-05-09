@@ -172,7 +172,7 @@ public class Goodegg {
 							//Checks if processor
 							if (cart.get(i).startsWith("Intel") || cart.get(i).startsWith("The"))
 							{
-								game.getInventory().addToInventory(new Processor(cart.get(i).split(" - ")[0], Integer.parseInt(cart.get(i).split(" - ")[1].replace(" Cores", ""))));
+								game.getInventory().addToInventory(new Processor(cart.get(i).split(" - ")[0], Integer.parseInt(cart.get(i).split(" - ")[1].replace(" Cores", "")), game));
 							}
 							else
 							{

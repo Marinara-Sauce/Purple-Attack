@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import game.Directory;
 import game.File;
+import game.Firewall;
 import game.SecureFile;
 import game.TextFile;
 
@@ -47,6 +48,8 @@ public class Player
 	private boolean gameOver; //True if the game is over, notifies players when true
 	private Player winningPlayer; //True if the player won, gets set in game
 	
+	private Firewall firewall;
+	
 	public Player(String name, Socket socket, PrintWriter out, Scanner in, Game game)
 	{
 		this.name = name;
@@ -56,6 +59,8 @@ public class Player
 		this.game = game;
 		
 		gameOver = false;
+		
+		firewall = new Firewall();
 		
 		System.out.println("Created a new player with name: " + name + " | Socket: " + socket);
 	}
@@ -104,6 +109,8 @@ public class Player
 		else if (command.startsWith("PASSWORD"))
 			password(command);
 		
+		else if (command.startsWith("FIREWALL"))
+			firewall.processCommand(command);
 	}
 	
 	//Sets up a file system for the game
@@ -218,7 +225,7 @@ public class Player
 			out.println(dir);
 		}
 	}
-	
+	 
 	public String getParentDirAsString(Directory dir)
 	{
 		if (dir.getParent() == null)
@@ -245,6 +252,11 @@ public class Player
 			currentDir.getFiles().remove(file);
 	}
 
+	//Checks if the firewall allows the connection
+	public boolean blockedConnection()
+	{
+		return firewall.blockConnection();
+	}
 	
 	//---------------------------COMMANDS-----------------------------------------------//
 	
@@ -521,14 +533,22 @@ public class Player
 			}
 			else if (ip.equals(opponentIP))
 			{
-				out.println("CONNECTSUCCESS");
-				connectedToOpponent = true;
-				opponentCurrentDir = game.getOpponentBaseDirectory(this);
-				currentDir = opponentCurrentDir;
-				
-				game.notifyClientConnected(socket);
-				
-				return;
+				if (!game.getOpponent(this).blockedConnection())
+				{
+					out.println("CONNECTSUCCESS");
+					connectedToOpponent = true;
+					opponentCurrentDir = game.getOpponentBaseDirectory(this);
+					currentDir = opponentCurrentDir;
+					
+					game.notifyClientConnected(socket);
+					
+					return;
+				}
+				else
+				{
+					out.println("CONNECTFAILEDBLOCKED");
+					return;
+				}
 			}
 			else
 			{

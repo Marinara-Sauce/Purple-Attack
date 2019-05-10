@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Goodegg {
 
-	private static String title = "Goodegg";
 	private static String url = "https://www.goodegg.com";
 	private static int health = 1000;
 	

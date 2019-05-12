@@ -192,7 +192,9 @@ public class Game
 		for (int i = 0 ; i < players.size() ; i++)
 		{
 			if (players.get(i) == player);
+			{
 				return players.get(1 - i);
+			}
 		}
 		
 		return null;

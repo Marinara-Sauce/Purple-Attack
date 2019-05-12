@@ -34,6 +34,7 @@ public class Processor
 		cores= new ArrayList<>();
 		this.game = game;
 		initCores();
+		setBitcoinMiner(game.getBitcoinMiner());
 	}
 	
 	public Processor(Game game)
@@ -139,6 +140,10 @@ public class Processor
 			catch (InputMismatchException e)
 			{
 				System.out.println("You must input a number!");
+			}
+			catch (ArrayIndexOutOfBoundsException e)
+			{
+				System.out.println("Invalid Option!");
 			}
 		}
 	}

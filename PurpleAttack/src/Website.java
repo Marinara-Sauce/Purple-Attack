@@ -20,6 +20,35 @@ public class Website {
 		//The classes run the code here
 	}
 	
+	//A function that starts the purchase process, returns true if purchased
+	public static boolean purchaseItem(int price, BitcoinMiner btc, Scanner input)
+	{
+		System.out.println("Price: $" + price + "( BTC: " + (price / 500) + " )");
+		System.out.println("Your Wallet's Balance: $" + btc.btcToUSD() + " ( BTC: " + btc.getAmount() + " )");
+		System.out.println();
+		
+		int selection = getInput(input, "Would you like to purchase? (0 = No, 1 = Yes)", 0, 1);
+		
+		if (selection == 0)
+			return false;
+		
+		if (selection == 1)
+		{
+			if (btc.purchase(price))
+			{
+				System.out.println("Transaction Success!");
+				return true;
+			}
+			else
+			{
+				System.out.println("Transaction Failed! Insufficeint Funds!");
+				return false;
+			}
+		}
+		
+		return false;
+	}
+	
 	protected static int getInput(Scanner in, String question, int min, int max)
 	{
 		int input;

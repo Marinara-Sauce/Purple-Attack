@@ -28,7 +28,7 @@ public class Firewall
 		
 		else if (command.contains("LEVEL"))
 		{
-			level = Integer.parseInt(command.replace("LEVEl", ""));
+			level = Integer.parseInt(command.replace("LEVEL", ""));
 		}
 	}
 	
@@ -37,7 +37,7 @@ public class Firewall
 	{	
 		int random = (int) (Math.random() * 100);
 		int needToBlock = (10 * level) + (2 * numCores);
-		
+		System.out.println(random + " / " + needToBlock);
 		return random <= needToBlock;
 	}
 	

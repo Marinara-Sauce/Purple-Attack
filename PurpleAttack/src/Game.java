@@ -84,6 +84,7 @@ public class Game
 			}
 			catch (Exception e)
 			{
+				e.printStackTrace();
 				System.out.println("");
 				System.err.println("Cannot connect to the server!");
 				delay(100);
@@ -479,7 +480,7 @@ public class Game
 		else
 			ip = command.replace("connect ", "");
 		
-		final String[] websites = {"www.goodegg.com"};
+		final String[] websites = {"www.goodegg.com", "www.bitblock.com"};
 		
 		//Check for and connect to any websites
 		
@@ -494,6 +495,9 @@ public class Game
 				//Connects
 				if (ip.equals("www.goodegg.com"))
 					Goodegg.run(this);
+				
+				else if (ip.equals("www.bitblock.com"))
+					BitBlocker.run(this);
 			}
 		}
 		

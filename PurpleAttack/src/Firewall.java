@@ -8,9 +8,11 @@ public class Firewall {
 	
 	public Firewall(int level, Processor processor, Game game) 
 	{
-		this.level = 0;
+		this.level = level;
 		this.processor = processor;
 		this.game = game;
+		
+		sendToServer();
 	}
 	
 	public Firewall(Processor processor, Game game)
@@ -18,6 +20,12 @@ public class Firewall {
 		level = 0;
 		this.processor = processor;
 		this.game = game;
+	}
+	
+	//Sends level to the server
+	public void sendToServer()
+	{
+		game.getPrintWriter().println("FIREWALLLEVEL" + level);
 	}
 	
 	//Returns number of cores focusing on this

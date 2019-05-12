@@ -57,12 +57,37 @@ public class BitBlocker extends Website {
 			
 			for (int i = currentVersion - 1 ; i < catalog.length ; i++)
 			{
-				System.out.print((i + 1) + catalog[i] + " - Price: $" + calculatePrice(i, currentVersion));
-				System.out.println("");
+				if (i > currentVersion - 1)
+				{
+					System.out.print((i + 1) + ". " + catalog[i] + " - Price: $" + calculatePrice(i + 1, currentVersion));
+					System.out.println("");
+				}
 			}
 			
 			System.out.print("5. Go Back");
 			int selection = getInput(input, "", currentVersion, 5);
+			
+			if (selection == 5)
+				return;
+			
+			if (selection <= currentVersion)
+			{
+				System.out.println("You already have this version, or you are trying to downgrade.");
+			}
+			else
+			{
+				int price = calculatePrice(selection, currentVersion);
+				
+				if (purchaseItem(price, game.getBitcoinMiner(), input))
+				{
+					System.out.println("Thank you for securing with BitBlocker!");
+					game.getInventory().setFirewall(new Firewall(selection, game.getProcessor(), game));
+				}
+				else
+				{
+					return;
+				}
+			}
 		}
 	}
 	

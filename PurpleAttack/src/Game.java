@@ -219,6 +219,9 @@ public class Game
 				else if (command.startsWith("EndGame"))
 					endGame(true);
 				
+				else if (command.startsWith("decrypt"))
+					inventory.getDecryptor().processCommand(command, out, in);
+				
 				else
 					System.out.println("Unknown command! Type help for a list of commands");
 			}

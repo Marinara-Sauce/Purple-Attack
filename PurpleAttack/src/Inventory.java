@@ -18,6 +18,7 @@ public class Inventory {
 	private int blockerLevel;
 	
 	private Firewall firewall;
+	private Decryptor decryptor;
 	
 	public Inventory(Game game) 
 	{
@@ -304,5 +305,13 @@ public class Inventory {
 
 	public void setFirewall(Firewall firewall) {
 		this.firewall = firewall;
+	}
+
+	public Decryptor getDecryptor() {
+		return decryptor;
+	}
+
+	public void setDecryptor(Decryptor decryptor) {
+		this.decryptor = decryptor;
 	}
 }

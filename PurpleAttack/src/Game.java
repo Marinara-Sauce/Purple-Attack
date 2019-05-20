@@ -312,6 +312,8 @@ public class Game
 		out.println("REQUESTCURRENTDIR");
 		delay(50);
 		
+		inventory.getDecryptor().runTick(out);
+		
 		while (in.hasNextLine())
 		{
 			String line = in.nextLine();
@@ -580,7 +582,8 @@ public class Game
 			if (dirIn.equals("ENDOFLINE"))
 				break;
 			
-			System.out.println(dirIn);
+			if (!dirIn.startsWith("OPPONENT"))
+				System.out.println(dirIn);
 		}
 		System.out.println("----------------------------------");
 	}

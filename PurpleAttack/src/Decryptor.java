@@ -64,6 +64,25 @@ public class Decryptor
 		return false;
 	}
 	
+	public void runTick(PrintWriter out)
+	{
+		if (checkTimer())
+		{
+			System.out.println("Decryptor Finished Decrypting!");
+			
+			if (decryptingFolder)
+			{
+				System.out.println("The folder has been placed in your current directory");
+				out.println("FINISHEDDECRYPTFOLDER" + decryptingFileName);
+			}
+			else
+			{
+				System.out.println("The file has been saved as out.txt");
+				out.println("FINISHEDDECRYPT" + decryptingFileName);
+			}
+		}
+	}
+	
 	//Takes in the socket and the print writer from the client for communication between the server and client
 	public void processCommand(String command, PrintWriter out, Scanner in)
 	{
@@ -109,6 +128,8 @@ public class Decryptor
 				}
 			}
 		}
+		
+		else System.out.println("Unknown Command! Type decrypt help for a list of commands");
 	}
 	
 	//----------------------------------GETTERS AND SETTERS-------------------------------//

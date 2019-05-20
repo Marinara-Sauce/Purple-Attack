@@ -114,6 +114,9 @@ public class Player
 		
 		else if (command.startsWith("DECRYPT"))
 			decrypt(command);
+		
+		else if (command.startsWith("FINISHEDDECRYPT"))
+			finishedDecrypt(command);
 	}
 	
 	//Sets up a file system for the game
@@ -603,8 +606,8 @@ public class Player
 	
 	private void decrypt(String command)
 	{
-		String fileName = command.replace("DECRPYT", "");
-		
+		String fileName = command.replace("DECRYPT", "");
+
 		//Search for filenames
 		for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
 		{
@@ -627,6 +630,70 @@ public class Player
 		
 		out.println("NOFILE");
 		return;
+	}
+	
+	private void finishedDecrypt(String command)
+	{
+		String c = command.replace("FINISHEDDECRYPT", "");
+		
+		if (c.contains("FOLDER"))
+		{
+			//Decrypted thing is a folder
+			//Look for the name of the folder to decrypt
+			Directory searchDir = currentDir;
+			boolean found = false;
+			
+			while (!found)
+			{
+				String name = c.replace("FOLDER", "");
+				//Look for the folder in the searching dir
+				for (int i = 0 ; i < searchDir.getDirectorys().size() ; i++)
+				{
+					if (searchDir.getDirectorys().get(i).getName().equals(name))
+					{
+						searchDir.getDirectorys().get(i).setPassword("");
+						searchDir.setProtect(false);
+						found = true;
+						break;
+					}
+				}
+				
+				if (searchDir.getParent() == null)
+					break;
+				
+				else searchDir = currentDir.getParent();
+			}
+		}
+		else
+		{
+			//Decrypted thing is a file
+			Directory searchDir = currentDir;
+			boolean found = false;
+			
+			while (!found)
+			{
+				String name = c;
+				//Look for the folder in the searching dir
+				for (int i = 0 ; i < searchDir.getFiles().size() ; i++)
+				{
+					if (searchDir.getFiles().get(i).getName().equals(name))
+					{
+						SecureFile file = (SecureFile) (searchDir.getFiles().get(i));
+						TextFile out = new TextFile("out.txt");
+						out.setContents(file.getContents());
+						currentDir.addFile(out);
+						
+						found = true;
+						break;
+					}
+				}
+				
+				if (searchDir.getParent() == null)
+					break;
+				
+				else searchDir = currentDir.getParent();
+			}
+		}
 	}
 	
 	//---------------------------Util Checking Methods and Stuff-------------------------\\

@@ -34,6 +34,7 @@ public class Inventory {
 		
 		connectionBlocker = new ConnectionBlocker(1, equippedProcessor);
 		firewall = new Firewall(1, equippedProcessor, game);
+		decryptor = new Decryptor(10, equippedProcessor);
 		blockerLevel = 0;
 	}
 	

@@ -111,6 +111,9 @@ public class Player
 		
 		else if (command.startsWith("FIREWALL"))
 			firewall.processCommand(command);
+		
+		else if (command.startsWith("DECRYPT"))
+			decrypt(command);
 	}
 	
 	//Sets up a file system for the game
@@ -595,6 +598,34 @@ public class Player
 			out.println("PASSWORDINCORRECT");
 		}
 		
+		return;
+	}
+	
+	private void decrypt(String command)
+	{
+		String fileName = command.replace("DECRPYT", "");
+		
+		//Search for filenames
+		for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
+		{
+			if (currentDir.getFiles().get(i).getName().equals(fileName))
+			{
+				out.println("CONFIRMED");
+				return;
+			}
+		}
+		
+		//Search for directories
+		for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
+		{
+			if (currentDir.getDirectorys().get(i).getName().equals(fileName))
+			{
+				out.println("CONFIRMEDFOLDER");
+				return;
+			}
+		}
+		
+		out.println("NOFILE");
 		return;
 	}
 	

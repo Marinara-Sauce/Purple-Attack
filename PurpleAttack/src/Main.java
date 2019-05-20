@@ -1,10 +1,11 @@
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException 
-	{
+	{	
 		Scanner input = new Scanner(System.in);
 		System.out.println("Welcome to Purple Attack!");
 		System.out.println("This game looks better in fullscreen! Press F11 to Enter Fullscreen Mode!");

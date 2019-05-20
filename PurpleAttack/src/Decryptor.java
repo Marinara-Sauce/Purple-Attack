@@ -1,5 +1,6 @@
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Decryptor 
@@ -135,7 +136,4 @@ public class Decryptor
 	public void setTimerRunning(boolean timerRunning) {
 		this.timerRunning = timerRunning;
 	}
-	
-	
-
 }

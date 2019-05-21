@@ -67,9 +67,7 @@ public class Decryptor
 	public void runTick(PrintWriter out)
 	{
 		if (checkTimer())
-		{
-			System.out.println("Decryptor Finished Decrypting!");
-			
+		{	
 			if (decryptingFolder)
 			{
 				System.out.println("The folder has been placed in your current directory");
@@ -115,9 +113,9 @@ public class Decryptor
 					line = line.replace("CONFIRMED", "");
 					
 					if (line.contains("FOLDER"))
-						startTimer(true, line.replace("FOLDER", ""));
+						startTimer(true, command.replace("decrypt crack ", ""));
 					else
-						startTimer(false, line);
+						startTimer(false, command.replace("decrypt crack ", ""));
 					
 					break;
 				}

@@ -651,8 +651,8 @@ public class Player
 				{
 					if (searchDir.getDirectorys().get(i).getName().equals(name))
 					{
-						searchDir.getDirectorys().get(i).setPassword("");
-						searchDir.setProtect(false);
+						searchDir.getDirectorys().get(i).setPassword(null);
+						searchDir.getDirectorys().get(i).setProtect(false);
 						found = true;
 						break;
 					}

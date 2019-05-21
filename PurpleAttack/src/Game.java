@@ -13,6 +13,8 @@ import commands.Help;
 
 public class Game 
 {
+	private final boolean DEBUG = true;
+	
 	private String name; //The players name
 	
 	private Scanner input; //Main Input Scanner for Player
@@ -171,7 +173,7 @@ public class Game
 				else if (command.equals("clr") || command.equals("clear"))
 					clearConsole();
 				
-				else if (command.equals("dir") || command.equals("ls"))
+				else if (command.equals("dir"))
 					printDirs(command);
 				
 				else if (command.contains("cat"))
@@ -278,14 +280,17 @@ public class Game
 	{
 		clearConsole();
 		
-		for (int i = 0 ; i < bootSequenceText.size() ; i++)
+		if (!DEBUG)
 		{
-			String text = bootSequenceText.get(i);
-			if (text.equals("Done!") || text.equals("Located!") || text.equals("Finished!"))
-				delay(500);
-			
-			System.out.println(text);
-			delay(50);
+			for (int i = 0 ; i < bootSequenceText.size() ; i++)
+			{
+				String text = bootSequenceText.get(i);
+				if (text.equals("Done!") || text.equals("Located!") || text.equals("Finished!"))
+					delay(500);
+				
+				System.out.println(text);
+				delay(50);
+			}
 		}
 		
 		System.out.print("Finializing Boot...");

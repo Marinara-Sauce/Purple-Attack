@@ -34,7 +34,7 @@ public class Inventory {
 		
 		connectionBlocker = new ConnectionBlocker(1, equippedProcessor);
 		firewall = new Firewall(1, equippedProcessor, game);
-		decryptor = new Decryptor(3, equippedProcessor);
+		decryptor = new Decryptor(1, equippedProcessor);
 		blockerLevel = 0;
 	}
 	
@@ -123,6 +123,7 @@ public class Inventory {
 		
 		System.out.println("Connection Blocker: Running Version " + connectionBlocker.getLevel());
 		System.out.println("Firewall: Running Version " + firewall.getLevel());
+		System.out.println("Decryptor: Running Version " + decryptor.getLevel());
 	}
 	
 	public void equipItem()

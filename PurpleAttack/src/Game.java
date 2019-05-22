@@ -490,7 +490,7 @@ public class Game
 		else
 			ip = command.replace("connect ", "");
 		
-		final String[] websites = {"www.goodegg.com", "www.bitblock.com"};
+		final String[] websites = {"www.goodegg.com", "www.bitblock.com", "crackersploit.onion"};
 		
 		//Check for and connect to any websites
 		
@@ -508,6 +508,9 @@ public class Game
 				
 				else if (ip.equals("www.bitblock.com"))
 					BitBlocker.run(this);
+				
+				else if (ip.equals("crackersploit.onion"))
+					CrackerSploit.run(this);
 			}
 		}
 		

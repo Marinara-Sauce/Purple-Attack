@@ -15,7 +15,7 @@ public class Core
 	
 	public String getFocusAsString()
 	{
-		final String focuses[] = {"Inactive", "Bitcoin Mining", "Connection Blocker", "Firewall"};
+		final String focuses[] = {"Inactive", "Bitcoin Mining", "Connection Blocker", "Firewall", "Decryptor"};
 		
 		return focuses[focus];
 	}

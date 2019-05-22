@@ -336,7 +336,7 @@ public class Game
 				
 				else if (result.equals("LOSE"))
 				{
-					endGame(true);
+					endGame(false);
 					return "";
 				}
 				

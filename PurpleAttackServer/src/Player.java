@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import game.Directory;
 import game.File;
@@ -172,14 +175,23 @@ public class Player
 		TextFile websiteIP = new TextFile("websites.txt");
 		
 		websiteIP.setContents("Websites to visit\n\n"
-				+ "Secure Serve - Shop for security software such as firewalls and anti-maleware software - URL: secureserve.com\n"
-				+ "Breakware - Shop for malicious software and code - URL: breakware.onion\n"
+				+ "BitBlocker - Shop for security software such as Firewalls and Blockers - URL: www.bitblock.com\n"
 				+ "Goodegg - Shop for computer parts - URL: www.goodegg.com\n"
-				+ "Saltiens - Shop for password cracking software - URL: saltienscrackers.onion");
+				+ "Crackersploit - Shop for software for cracking .sec files and folders - URL: crackersploit.onion");
 		
-		serverIP.setContents("Important IP Addresses to Servers\n\n"
-				+ "Your IP: " + playerIP + "\n"
-				+ "Target's IP: " + opponentIP + "\n");
+//		serverIP.setContents("Important IP Addresses to Servers\n\n"
+//				+ "Your IP: " + playerIP + "\n"
+//				+ "Target's IP: " + opponentIP + "\n");
+		
+		serverIP.setContents("We are fetching the IP address of your opponent. It will appear here in approxomatly 2 minutes\n"
+				+ "Your IP: " + playerIP);
+		
+		//Start Server IP Timer
+		Runnable r = new PlayerTimer(this);
+		ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+		service.scheduleAtFixedRate(r, 120, 120, TimeUnit.SECONDS);
+		
+		System.out.println("Started IP Unlock Timer");
 		
 		contactsFolder.addFile(websiteIP);
 		contactsFolder.addFile(serverIP);
@@ -262,6 +274,33 @@ public class Player
 	public boolean blockedConnection()
 	{
 		return firewall.blockConnection();
+	}
+	
+	//Sets the servers.txt file to contain the current server IP
+	public void unlockIPAddress()
+	{
+		System.out.println("The Server IP's have been released!");
+		
+		//Get the base directory
+		Directory base;
+		Directory current = currentDir;
+		while (true)
+		{
+			if (current.getParent() == null)
+			{
+				base = current;
+				break;
+			}
+			
+			current = current.getParent();
+		}
+		
+		//Get the contacts folder
+		Directory contactsFolder = base.getDirectorys().get(base.getIndexOfDirectory("contacts"));
+		TextFile serverFile = (TextFile) contactsFolder.getFiles().get(contactsFolder.getIndexOfFile("servers.txt"));
+		serverFile.setContents("Important IP Addresses to Servers\n\n"
+				+ "Your IP: " + playerIP + "\n"
+				+ "Target's IP: " + opponentIP + "\n");
 	}
 	
 	//---------------------------COMMANDS-----------------------------------------------//

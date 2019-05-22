@@ -129,7 +129,7 @@ public class Processor
 				else
 				{
 					Core core = cores.get(selection - 1);
-					System.out.println("Please enter a focus (0 - Inactive, 1 - Bitcoin Mining, 2 - Connection Blocker, 3 - Firewall");
+					System.out.println("Please enter a focus (0 - Inactive, 1 - Bitcoin Mining, 2 - Connection Blocker, 3 - Firewall, 4 - Decryptor");
 					core.setFocus(input.nextInt());
 					System.out.println("Success!");
 				}

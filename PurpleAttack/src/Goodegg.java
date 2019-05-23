@@ -236,6 +236,7 @@ public class Goodegg {
 			catch (InputMismatchException e)
 			{
 				System.err.println("Please enter an number!");
+				System.out.println("9999");
 			}
 		}
 		

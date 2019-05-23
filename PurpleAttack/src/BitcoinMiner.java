@@ -2,9 +2,9 @@ import java.text.DecimalFormat;
 
 public class BitcoinMiner 
 {
-	private final boolean DEBUG = true; //Increases mining rate by a lot
+	private final boolean DEBUG = false; //Increases mining rate by a lot
 	
-	private final int MAX_CORES = 6;
+	private final int MAX_CORES = 4;
 	private final String HELP_TEXT = "Bitcoin is an program to manage and mine for bitcoins. Each command listed below has to be prefixed with bitcoin\nCOMMANDS\nhelp - displays this\nview - displays info";
 	private double amount; //Number of bitcoins in wallet
 	private int cores; //Number of cores the user is using

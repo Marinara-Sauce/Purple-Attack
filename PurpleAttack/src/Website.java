@@ -23,7 +23,7 @@ public class Website {
 	//A function that starts the purchase process, returns true if purchased
 	public static boolean purchaseItem(int price, BitcoinMiner btc, Scanner input)
 	{
-		System.out.println("Price: $" + price + "( BTC: " + (price / 500) + " )");
+		System.out.println("Price: $" + price + "( BTC: " + (price / 5000) + " )");
 		System.out.println("Your Wallet's Balance: $" + btc.btcToUSD() + " ( BTC: " + btc.getAmount() + " )");
 		System.out.println();
 		
@@ -34,7 +34,7 @@ public class Website {
 		
 		if (selection == 1)
 		{
-			if (btc.purchase(price))
+			if (btc.purchase(price / 5000))
 			{
 				System.out.println("Transaction Success!");
 				return true;

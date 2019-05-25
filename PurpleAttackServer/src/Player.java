@@ -120,6 +120,9 @@ public class Player
 		
 		else if (command.startsWith("FINISHEDDECRYPT"))
 			finishedDecrypt(command);
+		
+		else if (command.startsWith("SENDMESSAGE"))
+			sendMessage(command);
 	}
 	
 	//Sets up a file system for the game
@@ -219,6 +222,11 @@ public class Player
 		baseDir = currentDir;
 	}
 	
+	public void sendMessageToClient(String sender, String content)
+	{
+		out.println("ADDMESSAGE" + sender + " ` " + content);
+	}
+	
 	public void getCurrentDirectory()
 	{
 		//Checks if the game is over
@@ -279,7 +287,8 @@ public class Player
 	//Sets the servers.txt file to contain the current server IP
 	public void unlockIPAddress()
 	{
-		System.out.println("The Server IP's have been released!");
+		System.out.println("IP Addresses Released!");
+		sendMessageToClient("Eric", "The Server IP's have been released!");
 		
 		//Get the base directory
 		Directory base;
@@ -733,6 +742,12 @@ public class Player
 				else searchDir = currentDir.getParent();
 			}
 		}
+	}
+	
+	public void sendMessage(String command)
+	{
+		command = command.replace("SENDMESSAGE", "");
+		game.getOpponent(this).sendMessageToClient(command.split("`")[0], command.split("`")[1]);
 	}
 	
 	//---------------------------Util Checking Methods and Stuff-------------------------\\

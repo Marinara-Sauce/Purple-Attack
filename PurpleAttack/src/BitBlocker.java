@@ -26,8 +26,10 @@ public class BitBlocker extends Website {
 				openFirewallShop(game, input);
 				break;
 			case 2:
+				openConnectionBlockerShop(input, game);
 				break;
 			case 3:
+				System.out.println("Maleware hasn't been added in the game yet!");
 				break;
 			case 4:
 				System.out.println("Thank you! We hope you connect again soon!");
@@ -96,9 +98,58 @@ public class BitBlocker extends Website {
 		//TODO: Maleware and Stuff
 	}
 	
-	private static void openConnectionBlockerShop()
+	private static void openConnectionBlockerShop(Scanner input, Game game)
 	{
+		int currentVersion = game.getInventory().getConnectionBlocker().getLevel();
 		
+		System.out.println("Checking Current Blocker Version...");
+		delay(1000);
+		System.out.println("Found Version: " + currentVersion);
+		
+		System.out.println("");
+		
+		boolean running = true;
+		
+		final String[] catalog = {"DEFAULT_VERSION", "V2 - Time to Terminate - 45 Seconds (-2 per core)", "V2 - Time to Terminate - 30 Seconds (-2 per core)", "V4 - Time to Terminate - 15 Seconds (-2 per core)"};
+		
+		while (running)
+		{
+			System.out.println("Choose A Version to Upgrade To:");
+			
+			for (int i = currentVersion - 1 ; i < catalog.length ; i++)
+			{
+				if (i > currentVersion - 1)
+				{
+					System.out.print((i + 1) + ". " + catalog[i] + " - Price: $" + calculatePrice(i + 1, currentVersion));
+					System.out.println("");
+				}
+			}
+			
+			System.out.print("5. Go Back");
+			int selection = getInput(input, "", currentVersion, 5);
+			
+			if (selection == 5)
+				return;
+			
+			if (selection <= currentVersion)
+			{
+				System.out.println("You already have this version, or you are trying to downgrade.");
+			}
+			else
+			{
+				int price = calculatePrice(selection, currentVersion);
+				
+				if (purchaseItem(price, game.getBitcoinMiner(), input))
+				{
+					System.out.println("Thank you for securing with BitBlocker!");
+					game.getInventory().setConnectionBlocker(new ConnectionBlocker(selection, game.getProcessor()));
+				}
+				else
+				{
+					return;
+				}
+			}
+		}
 	}
 	
 	private static int calculatePrice(int version, int currentVersion)

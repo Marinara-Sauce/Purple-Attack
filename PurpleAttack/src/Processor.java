@@ -176,6 +176,10 @@ public class Processor
 		this.cores = cores;
 	}
 	
+	public Game getGame()
+	{
+		return game;
+	}
 	
 	
 }

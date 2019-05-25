@@ -52,7 +52,7 @@ public class Website {
 	protected static int getInput(Scanner in, String question, int min, int max)
 	{
 		int input;
-		
+
 		while (true)
 		{
 			System.out.println(question);

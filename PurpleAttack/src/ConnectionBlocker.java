@@ -1,3 +1,4 @@
+import java.util.Date;
 
 //Class runs the connection blocker stuff
 public class ConnectionBlocker {
@@ -58,7 +59,8 @@ public class ConnectionBlocker {
 		if (terminated())
 		{
 			terminatedConnection();
-			System.out.println("A Connection Was Terminated by the Connection Blocker!");
+			//System.out.println("A Connection Was Terminated by the Connection Blocker!");
+			processor.getGame().addMessageToInbox(new Message("Connection Blocker", "A Connection Was Terminated by the Connection Blocker!", new Date()));
 		}
 	}
 	

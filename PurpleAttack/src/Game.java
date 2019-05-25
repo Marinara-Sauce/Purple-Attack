@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,7 +14,7 @@ import commands.Help;
 
 public class Game 
 {
-	private final boolean DEBUG = false;
+	private final boolean DEBUG = true;
 	
 	private String name; //The players name
 	
@@ -27,6 +28,7 @@ public class Game
 	private Inventory inventory;
 	
 	private BitcoinMiner bitcoin;
+	private Inbox inbox;
 	
 	private boolean gameOver;
 	
@@ -139,7 +141,7 @@ public class Game
 		playBootSequence();
 		
 		inventory = new Inventory(this);
-		
+		inbox = new Inbox();
 		//Inits Bitcoin and such
 		bitcoin = new BitcoinMiner(this, inventory.getEquippedProcessor());
 		bitcoin.startMining();
@@ -223,6 +225,9 @@ public class Game
 				
 				else if (command.startsWith("decrypt"))
 					inventory.getDecryptor().processCommand(command, out, in);
+				
+				else if (command.startsWith("inbox"))
+					inbox.processCommand(command, out, this);
 				
 				else
 					System.out.println("Unknown command! Type help for a list of commands");
@@ -354,6 +359,14 @@ public class Game
 			{
 				System.out.println("The connection was terminated by the Connection Blocker!");
 			}
+			else if (line.startsWith("ADDMESSAGE"))
+			{
+				//Syntax for this is ADDMESSAGE<Sender> ` <Content>
+				String m = line.replace("ADDMESSAGE", "");
+				String sender = m.split(" ` ")[0];
+				String contents = m.split(" ` ")[1];
+				addMessageToInbox(new Message(sender, contents, new Date()));
+			}
 			else if (!line.isEmpty() && !line.equals("CDFAILED")) 
 			{
 				System.out.print(line);
@@ -440,6 +453,11 @@ public class Game
 	public void opponentDisconnected()
 	{
 		inventory.getConnectionBlocker().terminatedConnection();
+	}
+	
+	public void addMessageToInbox(Message message)
+	{
+		inbox.addMessage(message);
 	}
 	//-------------------------COMMAND FUNCTIONS---------------------------//
 	
@@ -900,6 +918,11 @@ public class Game
 	public PrintWriter getPrintWriter()
 	{
 		return out;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public void delay(int time)

@@ -14,7 +14,7 @@ import commands.Help;
 
 public class Game 
 {
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	
 	private String name; //The players name
 	

@@ -68,6 +68,7 @@ public class Website {
 			catch (InputMismatchException e)
 			{
 				System.err.println("Please enter an number!");
+				in.nextLine();
 			}
 		}
 		

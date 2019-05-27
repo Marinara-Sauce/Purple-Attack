@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -14,31 +15,36 @@ public class Main {
 		
 		while (true)
 		{
-			//Starts main menu
-			System.out.println("Select an Option\n1. Join a Game\n2. Play Offline (Debug)\n3. Exit");
-			
-			switch (input.nextInt())
+			try
 			{
-				case 1:
-					Game game = new Game();
-					game.connect();
-					setWindowTitle("Purple Attack");
-					break;
-				case 2:
-					Game game2 = new Game();
-					game2.startGame();
-					break;
-				case 3:
-					System.out.println("Goodbye! Thanks for playing Purple Attack!");
-				try {
-					Thread.sleep(2500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				//Starts main menu
+				System.out.println("Select an Option\n1. Join a Game\n2. Exit");
+				
+				switch (input.nextInt())
+				{
+					case 1:
+						Game game = new Game();
+						game.connect();
+						setWindowTitle("Purple Attack");
+						break;
+					case 2:
+						System.out.println("Goodbye! Thanks for playing Purple Attack!");
+					try {
+						Thread.sleep(2500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					System.exit(0);
+					default:
+						System.err.println("Invalid Option!");
 				}
-				System.exit(0);
-				default:
-					System.err.println("Invalid Option!");
 			}
+			catch (InputMismatchException e)
+			{
+				System.out.println("Invalid Input!");
+				input.nextLine();
+			}
+			
 		}
 	}
 	

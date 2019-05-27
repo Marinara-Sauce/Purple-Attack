@@ -3,6 +3,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+//Yes I know, this should extend Website, don't know why I didn't do that, but it works so might as well not fix something that isn't broken
 public class Goodegg {
 
 	private static String url = "https://www.goodegg.com";
@@ -236,6 +237,7 @@ public class Goodegg {
 			catch (InputMismatchException e)
 			{
 				System.err.println("Please enter an number!");
+				in.nextLine();
 			}
 		}
 		

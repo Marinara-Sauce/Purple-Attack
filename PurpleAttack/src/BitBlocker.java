@@ -10,6 +10,7 @@ public class BitBlocker extends Website {
 
 	public static void run(Game game)
 	{
+		URL = "https://www.bitblock.com";
 		Website.run();
 		
 		Scanner input = new Scanner(System.in);

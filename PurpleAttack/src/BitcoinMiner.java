@@ -23,7 +23,7 @@ public class BitcoinMiner
 		this.game = game;
 		this.processor = processor;
 		
-		amount = 0;
+		amount = 0.05;
 		cores = 1;
 		version = 1;
 		
@@ -80,7 +80,7 @@ public class BitcoinMiner
 		if (DEBUG)
 			mineRate = 10;
 		else
-			mineRate = (0.000000025 * (double)(cores)) /* + (0.000000000000001 * (double)(version)) */;
+			mineRate = (0.00000000025 * (double)(cores)) /* + (0.000000000000001 * (double)(version)) */;
 	}
 	
 	//Purchases an item. Returns true if it was successful, returns false if it wasn't

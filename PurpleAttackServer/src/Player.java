@@ -551,6 +551,15 @@ public class Player
 		{
 			currentDir.addFile(copiedFile);
 			
+			//Check for same names
+			for (int i = 0 ; i < currentDir.getFiles().size() ; i++)
+			{
+				if (currentDir.getFiles().get(i).getName().equals(copiedFile.getName()))
+				{
+					copiedFile.setName(copiedFile.getName() + "2");
+				}
+			}
+			
 			if (moveFile)
 				copiedFile = null;
 			
@@ -559,6 +568,15 @@ public class Player
 		else if (copiedFile == null)
 		{
 			currentDir.addDirectory(copiedDirectory);
+			
+			//Check for same names
+			for (int i = 0 ; i < currentDir.getDirectorys().size() ; i++)
+			{
+				if (currentDir.getDirectorys().get(i).getName().equals(copiedDirectory.getName()))
+				{
+					copiedDirectory.setName(copiedDirectory.getName() + "2");
+				}
+			}
 			
 			if (moveFile)
 				copiedDirectory = null;
@@ -729,6 +747,16 @@ public class Player
 						SecureFile file = (SecureFile) (searchDir.getFiles().get(i));
 						TextFile out = new TextFile("out.txt");
 						out.setContents(file.getContents());
+						
+						//Check for double names
+						for (int j = 0 ; j < currentDir.getFiles().size() ; j++)
+						{
+							if (currentDir.getFiles().get(j).getName().equals("out.txt"))
+							{
+								out.setName(out.getName() + "2");
+							}
+						}
+						
 						currentDir.addFile(out);
 						
 						found = true;
